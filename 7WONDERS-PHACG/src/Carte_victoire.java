@@ -8,10 +8,7 @@ public class Carte_victoire extends Carte {
 	}
 
 	@Override
-	void effet() {
-		super.effet();
-		//return this.pts;
+	int effet() {
+		return this.pts;
 	}
-
-	
 }

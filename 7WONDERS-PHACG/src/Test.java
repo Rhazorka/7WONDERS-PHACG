@@ -16,22 +16,27 @@ public class Test {
 		Carte_victoire c3 = new Carte_victoire("victoire_7",r3,7);
 		
 		/*on les ajoute a sa liste de merveilles*/
-		ArrayList<Carte> m1 = new ArrayList<>();
-		m1.add(c1);
-		m1.add(c2);
-		m1.add(c3);
+		ArrayList<Carte> me1 = new ArrayList<>();
+		me1.add(c1);
+		me1.add(c2);
+		me1.add(c3);
 		
 		/*on créer le plateau*/
-		Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,m1);
+		Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
 		
 		/*on créer le joueur*/
 		Joueur j1 = new Joueur(p1);
 
-		/*on observe*/
-		System.out.println(c1.toString());
-		System.out.println(c2.toString());
-		System.out.println(c3.toString());
-		System.out.println(p1.toString());
+		/*on créer le moteur*/
+		Moteur mo1 = new Moteur(me1);
+		
+		/*on mélange les cartes*/
+		mo1.melangerCartes();
+		
+		/*on choisi une carte*/
+		j1.ajouterCarte(mo1.choisirCarte());
+		System.out.println(j1.toString());
+		j1.ajouterCarte(mo1.choisirCarte());
 		System.out.println(j1.toString());
 	}
 

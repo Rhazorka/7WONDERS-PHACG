@@ -9,7 +9,7 @@ public abstract class Carte {
 		this.cout = cout;
 	}
 	
-	void effet(){}									//effet de la carte (ex:donner des pts de victoires, changer les prix, ect...)
+	abstract int effet();							//effet de la carte (ex:donner des pts de victoires, changer les prix, ect...)
 													//je pense qu'il faudrait changer le type de la méthode afin qu'elle puisse renvoyer des int quand elle attribue des pts
 
 	@Override
