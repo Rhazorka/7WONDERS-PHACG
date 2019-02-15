@@ -6,6 +6,8 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
+import com.google.gson.Gson;
+
 import commun.Identification;
 import commun.Moteur;
 import commun.Plateau;
@@ -17,12 +19,12 @@ import commun.Carte;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import org.json.JSONArray;
 
 public class Serveur {
 	private SocketIOServer serveur;
-    final Object attenteConnexion = new Object();
+    private final Object attenteConnexion = new Object();
     private Identification leClient ;
+    private Joueur j1;
 
     public Serveur(Configuration config) {
         serveur = new SocketIOServer(config);
@@ -60,7 +62,7 @@ public class Serveur {
                 leClient = new Identification(identification.getNom());
 
         		/*on créer le joueur*/
-        		Joueur j1 = new Joueur(p1,leClient);
+        		j1 = new Joueur(p1,leClient);
                 System.out.println("serveur : me1 = "+me1.toString());
                 poserUneQuestion(socketIOClient,me1);
             }
@@ -68,11 +70,17 @@ public class Serveur {
 
 
         // on attend une réponse
-        serveur.addEventListener("requete", Integer.class, new DataListener<Integer>() {
+        serveur.addEventListener("requete", String.class, new DataListener<String>() {
             @Override
-            public void onData(SocketIOClient socketIOClient, Integer carteChoisi, AckRequest ackRequest) throws Exception {
-                System.out.println("serveur : la réponse de  "+leClient.getNom()+" est "+carteChoisi.toString());
+            public void onData(SocketIOClient socketIOClient, String carteChoisiJSON, AckRequest ackRequest) throws Exception {
+                System.out.println("serveur : la réponse de  "+leClient.getNom()+" est "+carteChoisiJSON.toString());
         		//j1.ajouterCarte(carteChoisi);
+                String jsonstr = carteChoisiJSON;  
+                Gson gson = new Gson();
+                Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
+                System.out.println("serveur : carteChoisi = "+carteChoisi);
+                j1.ajouterCarte(carteChoisi);
+                System.out.println("serveur : points de victoires = "+j1.getPtsVictoire());
                 synchronized (attenteConnexion) {
                 	attenteConnexion.notify();
                 }
@@ -98,8 +106,9 @@ public class Serveur {
     }
 
     private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
-    	JSONArray json = new JSONArray(deck);
-        socketIOClient.sendEvent("requete",deck);
+    	Gson gson = new Gson();
+    	String json = new Gson().toJson(deck);
+        socketIOClient.sendEvent("requete",json);
     }
 
 

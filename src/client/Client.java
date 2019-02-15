@@ -3,11 +3,12 @@ package client;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.Gson;
+
 import commun.Identification;
-import commun.Ressource;
+import commun.Moteur;
 import commun.Carte_victoire;
 import commun.Carte;
 
@@ -15,11 +16,12 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Client {
-    Identification moi = new Identification("Joueur 1");
-    Socket connexion;
-    final Object attenteDeconnexion = new Object();
+    private Identification moi = new Identification("Joueur 1");
+    private Socket connexion;
+    private final Object attenteDeconnexion = new Object();
 
     public Client(String urlServeur) {
         try {
@@ -50,16 +52,17 @@ public class Client {
                 public void call(Object... objects) {
                     System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s)");
                     ArrayList<Carte> cartes = new ArrayList<Carte>();
-                    JSONArray tab = (JSONArray) objects[0];
-                    for(int i = 0; i < tab.length(); i++) {
-                        try {
-                            cartes.add(new Carte_victoire(tab.getJSONObject(i).getString("nom"),(Ressource[])tab.getJSONObject(i).get("cout"),tab.getJSONObject(i).getInt("pts")));
-                        } 
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    connexion.emit("requete",1);
-                    }
+                    System.out.println("client : recu = "+(String)objects[0]);
+                    String jsonstr = (String) objects[0];  
+                    Gson gson = new Gson();
+                    Carte_victoire[] deck = gson.fromJson(jsonstr, Carte_victoire[].class);
+                    System.out.println("client : converti = :"+deck.toString());
+                    ArrayList<Carte> deckAL = new ArrayList<Carte>(Arrays.asList(deck));
+                    Moteur motemp = new Moteur(deckAL);
+                    Carte carteChoisi = motemp.choisirCarte();
+                    System.out.println("client : carteChoisi = "+carteChoisi.toString());
+                	String json = new Gson().toJson(carteChoisi);
+                    connexion.emit("requete",json);
                 }
             });
         } 

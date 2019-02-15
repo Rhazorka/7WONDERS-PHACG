@@ -1,3 +1,5 @@
+package commun;
+
 import java.util.ArrayList;
 
 public class Joueur {
@@ -10,9 +12,14 @@ public class Joueur {
 		this.plateau = plateau;
 		this.id = id;
 	}
+	
 	public void ajouterCarte(Carte carte) {
 		cartes.add(carte);
 		ptsVictoire+=carte.effet();
+	}
+	
+	public int getPtsVictoire() {
+		return ptsVictoire;
 	}
 
 	@Override
