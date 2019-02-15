@@ -22,8 +22,8 @@ Pendant la partie, le négoce des ressources nécessaires au développement est 
 + Règles du jeu : http://www.7wonders.net/wp-content/uploads/2017/06/7WONDERS_RULES_FR.pdf
 
 ## Technologies utilisées
-+JAVA
-+Maven
++ JAVA
++ Maven
 
 ## Utilisation
 
