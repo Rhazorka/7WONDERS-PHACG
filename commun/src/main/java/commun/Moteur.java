@@ -1,3 +1,5 @@
+package commun;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner; 
@@ -8,9 +10,7 @@ public class Moteur {
 	public Moteur(ArrayList<Carte> cartes) {
 		super();
 		this.cartes = cartes;
-	}
-	
-	public Carte choisirCarte() {
+	}	public Carte choisirCarte() {
 		Carte ret;
 		System.out.println("Bonjour, choissisez une carte en appuyant sur le chiffre correspondant : ");
 		for (Carte c : cartes) {

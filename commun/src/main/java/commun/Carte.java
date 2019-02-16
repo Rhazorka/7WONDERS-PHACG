@@ -1,3 +1,5 @@
+package commun;
+
 import java.util.Arrays;
 
 public abstract class Carte {

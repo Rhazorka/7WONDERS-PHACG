@@ -1,3 +1,4 @@
+package commun;
 
 public class Carte_victoire extends Carte {
 	private int pts;

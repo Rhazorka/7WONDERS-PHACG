@@ -1,3 +1,5 @@
+package commun;
+
 import java.util.ArrayList;
 
 public class Plateau {
