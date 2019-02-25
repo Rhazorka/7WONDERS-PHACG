@@ -1,8 +1,8 @@
 package test;
 
 import org.junit.Test;
-import sevenwonders.Carte_victoire;
-import sevenwonders.Ressource;
+import commun.Carte_victoire;
+import commun.Ressource;
 
 public class CarteTest {
 	

@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import sevenwonders.Carte_victoire;
-import sevenwonders.Ressource;
+import commun.Carte_victoire;
+import commun.Ressource;
 
 public class Carte_victoireTest {
 

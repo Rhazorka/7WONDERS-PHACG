@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import sevenwonders.Carte;
-import sevenwonders.Carte_victoire;
-import sevenwonders.Plateau;
-import sevenwonders.Ressource;
+import commun.Carte;
+import commun.Carte_victoire;
+import commun.Plateau;
+import commun.Ressource;
 
 public class PlateauTest {
 

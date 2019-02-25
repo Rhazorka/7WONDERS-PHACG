@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import sevenwonders.Carte;
-import sevenwonders.Carte_victoire;
-import sevenwonders.Joueur;
-import sevenwonders.Moteur;
-import sevenwonders.Plateau;
-import sevenwonders.Ressource;
+import commun.Carte;
+import commun.Carte_victoire;
+import commun.Joueur;
+import commun.Moteur;
+import commun.Plateau;
+import commun.Ressource;
+import commun.Identification;
 
 public class MoteurTest {
 
@@ -34,8 +35,11 @@ public class MoteurTest {
 		/*on créer le plateau*/
 		Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
 		
+		/*on créer une identification pour le besoin du test*/
+		Identification i1 = new Identification("j1");
+
 		/*on créer le joueur*/
-		Joueur j1 = new Joueur(p1);
+		Joueur j1 = new Joueur(p1,i1);
 
 		/*on créer le moteur*/
 		Moteur mo1 = new Moteur(me1);
