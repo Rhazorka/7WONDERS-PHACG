@@ -34,3 +34,8 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+
+#Python (problème au lancement du terminal)
+-/
+virtualenv-init/ 
+init/
