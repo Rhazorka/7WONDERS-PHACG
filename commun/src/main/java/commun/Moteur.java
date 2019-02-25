@@ -16,13 +16,19 @@ public class Moteur {
 		for (Carte c : cartes) {
 			 System.out.println(cartes.indexOf(c)+" : "+c.toString());
 		}
-		Scanner sc = new Scanner(System.in);
+		//Scanner sc = new Scanner(System.in);
+		
+		int choix_bot = (int) (Math.random() * cartes.size());
+
 		while(true) {
-			String str = sc.nextLine();
+			//String str = sc.nextLine();
+		
 			try {
-				int selection = Integer.parseInt(str);
-				ret = cartes.get(selection);
-				cartes.remove(selection);
+			//	int selection = Integer.parseInt(str);
+			//	ret = cartes.get(selection);
+			//	cartes.remove(selection);
+				ret = cartes.get(choix_bot);
+				cartes.remove(choix_bot);
 				return ret;
 			}catch(NumberFormatException e) {
 				System.out.println("Il faut que la selection soit un chiffre");
