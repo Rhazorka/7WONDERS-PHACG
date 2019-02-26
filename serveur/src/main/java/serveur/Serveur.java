@@ -65,11 +65,18 @@ public class Serveur {
         		/*on créer le joueur*/
         		j1 = new Joueur(p1,leClient);
                 System.out.println("serveur : me1 = "+me1.toString());
-                poserUneQuestion(socketIOClient,me1);
+                System.out.println("serveur : merv1 = "+p1);
+                distribPlateau(socketIOClient, p1);
             }
         });
 
-
+        serveur.addEventListener("distribution", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest) throws Exception {
+                System.out.println("serveur : la réponse de  "+leClient.getNom()+" est "+reponseJSON.toString());
+        		poserUneQuestion(socketIOClient,me1);
+            } 
+        });
         // on attend une réponse
         serveur.addEventListener("requete", String.class, new DataListener<String>() {
             @Override
@@ -108,7 +115,12 @@ public class Serveur {
         //On tue le programme 
         System.exit(0);
     }
-
+    private void distribPlateau(SocketIOClient socketIOClient, Plateau pl)
+    {
+        Gson gson = new Gson();
+    	String json = new Gson().toJson(pl);
+        socketIOClient.sendEvent("distribution",json);
+    }
     private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
     	Gson gson = new Gson();
     	String json = new Gson().toJson(deck);
