@@ -128,6 +128,7 @@ public class Serveur {
         config.setHostname("127.0.0.1");
         config.setPort(10101);
 
+        // permet de réutiliser l'adresse du port (fix linux)
         SocketConfig sockConfig = new SocketConfig();
         sockConfig.setReuseAddress(true);
         config.setSocketConfig(sockConfig);
