@@ -103,6 +103,8 @@ public class Serveur {
         }
         System.out.println("serveur : une connexion est arrivée, on arrête");
         serveur.stop();
+        //On tue le programme 
+        System.exit(0);
     }
 
     private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
