@@ -6,6 +6,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
+import com.corundumstudio.socketio.SocketConfig;
 import com.google.gson.Gson;
 
 import commun.Identification;
@@ -103,6 +104,7 @@ public class Serveur {
         }
         System.out.println("serveur : une connexion est arrivée, on arrête");
         serveur.stop();
+
         //On tue le programme 
         System.exit(0);
     }
@@ -125,6 +127,11 @@ public class Serveur {
         Configuration config = new Configuration();
         config.setHostname("127.0.0.1");
         config.setPort(10101);
+
+        SocketConfig sockConfig = new SocketConfig();
+        sockConfig.setReuseAddress(true);
+        config.setSocketConfig(sockConfig);
+
         Serveur serveur = new Serveur(config);
         serveur.demarrer();
         System.out.println("serveur : fin du main");
