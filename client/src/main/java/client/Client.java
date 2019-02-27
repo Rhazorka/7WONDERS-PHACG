@@ -65,6 +65,20 @@ public class Client {
                     connexion.emit("requete",json);
                 }
             });
+            connexion.on("distribution", new Emitter.Listener() { // on recoit une requete de la part du serveur avec le plateau
+                @Override
+                public void call(Object... objects) {
+                    System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s) ");
+                    String rep ="nop";
+                    if(objects.length>0)
+                    {
+                        System.out.println("client : recu = "+(String)objects[0]);
+                        rep="ok";
+                    }
+                	String json = new Gson().toJson(rep);
+                    connexion.emit("distribution",json);
+                }
+            });
         } 
         catch (URISyntaxException e) {
             e.printStackTrace();
