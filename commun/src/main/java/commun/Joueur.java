@@ -24,7 +24,7 @@ public class Joueur {
 
 	@Override
 	public String toString() {
-		return "Joueur [id=" + id + ", plateau=" + plateau + ", ptsVictoire=" + ptsVictoire + ", cartes=" + cartes
+		return "Joueur [id=" + id.getNom() + ", plateau=" + plateau + ", ptsVictoire=" + ptsVictoire + ", cartes=" + cartes
 				+ "]";
 	}
 }

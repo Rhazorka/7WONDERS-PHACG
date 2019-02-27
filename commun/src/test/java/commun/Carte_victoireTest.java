@@ -1,4 +1,4 @@
-package test;
+package commun;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +14,7 @@ public class Carte_victoireTest {
 	int p = 3;
 	
 	@Test
-    public void testEffet() throws Exception {
+    public void TestEffet() throws Exception {
        assertEquals(p, c1.effet());
     }
 

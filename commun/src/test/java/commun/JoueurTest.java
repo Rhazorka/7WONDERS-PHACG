@@ -1,4 +1,7 @@
-package test;
+package commun;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import org.junit.Test;
@@ -13,19 +16,18 @@ public class JoueurTest {
 	ArrayList<Carte> me1 = new ArrayList<Carte>();
 	Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
 	Ressource[] r3 = {Ressource.PIERRE,Ressource.PIERRE,Ressource.PIERRE,Ressource.PIERRE};
+	Carte_victoire c3 = new Carte_victoire("victoire_7",r3,4);
+
 	Identification i1 = new Identification("j1");
+	Joueur j1 = new Joueur(p1,i1);
+
+	String s = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[]], ptsVictoire=4, cartes=[Carte [nom=victoire_7, cout=[PIERRE, PIERRE, PIERRE, PIERRE]]]]";
+	int p = 4;
 
 	@Test
-	public void test() {
-
-		Joueur j1 = new Joueur(p1,i1);
-	
-		Carte_victoire c3 = new Carte_victoire("victoire_7",r3,7);
-		
+	public void Test() throws Exception {
 		j1.ajouterCarte(c3);
-		
-		System.out.println(j1.toString());
-		
+		assertEquals(p, j1.getPtsVictoire());
+		assertTrue(s.equals(j1.toString()));
 	}
-
 }
