@@ -12,7 +12,7 @@ public class Moteur {
 		this.cartes = cartes;
 	}	public Carte choisirCarte() {
 		Carte ret;
-		System.out.println("Bonjour, choissisez une carte en appuyant sur le chiffre correspondant : ");
+		System.out.println("Le bot choisi le numéro de la carte qu'il va jouer : ");
 		for (Carte c : cartes) {
 			 System.out.println(cartes.indexOf(c)+" : "+c.toString());
 		}
