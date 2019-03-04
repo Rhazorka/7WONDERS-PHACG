@@ -9,7 +9,7 @@ import commun.Ressource;
 public class CarteTest {
 	
 	Ressource[] r2 = {Ressource.BOIS,Ressource.BOIS,Ressource.BOIS};
-    String s = "Carte [nom=Victoire, cout=[BOIS, BOIS, BOIS]]";
+    String s = "Carte [nom=Victoire]";
     Carte_victoire c2 = new Carte_victoire("Victoire", r2, 3);  
 	
 	@Test

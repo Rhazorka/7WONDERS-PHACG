@@ -32,7 +32,7 @@ public class MoteurTest {
 	/*on créer le moteur*/
 	Moteur mo1 = new Moteur(me1);
 
-	String s = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[]], ptsVictoire=5, cartes=[Carte [nom=victoire_5, cout=[BOIS, BOIS, BOIS]]]]";
+	String s = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[]], ptsVictoire=5, cartes=[Carte [nom=victoire_5]]]";
 
 	@Test
 	public void test() throws Exception{

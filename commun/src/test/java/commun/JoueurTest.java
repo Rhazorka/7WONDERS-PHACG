@@ -21,7 +21,7 @@ public class JoueurTest {
 	Identification i1 = new Identification("j1");
 	Joueur j1 = new Joueur(p1,i1);
 
-	String s = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[]], ptsVictoire=4, cartes=[Carte [nom=victoire_7, cout=[PIERRE, PIERRE, PIERRE, PIERRE]]]]";
+	String s = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[]], ptsVictoire=4, cartes=[Carte [nom=victoire_7]]]";
 	int p = 4;
 
 	@Test

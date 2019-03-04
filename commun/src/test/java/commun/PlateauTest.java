@@ -16,7 +16,7 @@ public class PlateauTest {
 	ArrayList<Carte> me1 = new ArrayList<Carte>();
 	Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
 	
-	String s = "Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[Carte [nom=victoire_7, cout=[PIERRE, PIERRE, PIERRE, PIERRE]]]]";
+	String s = "Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[Carte [nom=victoire_7]]]";
 
 	@Test
 	public void test() {	
