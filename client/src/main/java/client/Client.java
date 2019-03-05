@@ -18,12 +18,60 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Client {
+public class Client extends Thread {
     private Identification moi = new Identification();
     private Socket connexion;
     private final Object attenteDeconnexion = new Object();
+    private String urlServeur;
 
     public Client(String urlServeur) {
+        System.out.println("C");
+        this.urlServeur=urlServeur;
+        try {
+            connexion = IO.socket(urlServeur);
+            System.out.println("client : on s'abonne à la connection / déconnection ");;
+            connexion.on("connect", new Emitter.Listener() {
+                @Override
+                public void call(Object... objects) {
+                    System.out.println("client : on est connecté et on s'identifie ");
+                    JSONObject id = new JSONObject(moi);
+                    connexion.emit("identification", id); //transmet l'objet moi au serveur
+                }
+            });
+            connexion.on("disconnect", new Emitter.Listener() {
+                @Override
+                public void call(Object... objects) {
+                    System.out.println("client : on est déconnecté");
+                    connexion.disconnect();
+                    connexion.close();
+                    synchronized (attenteDeconnexion) {
+                        attenteDeconnexion.notify();
+                    }
+                }
+            });
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void seConnecter() {
+        System.out.println("D");
+        connexion.connect();
+        System.out.println("client : en attente de déconnexion");
+        synchronized (attenteDeconnexion) {
+            try {
+                attenteDeconnexion.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                System.err.println("client : erreur dans l'attente");
+            }
+        }
+    }
+
+    public void run(){
+        System.out.println("B");
+        Client.main(null);
         try {
             connexion = IO.socket(urlServeur);
             System.out.println("client : on s'abonne à la connection / déconnection ");;
@@ -82,29 +130,16 @@ public class Client {
         catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
-    }
-
-    private void seConnecter() {
-        connexion.connect();
-        System.out.println("client : en attente de déconnexion");
-        synchronized (attenteDeconnexion) {
-            try {
-                attenteDeconnexion.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                System.err.println("client : erreur dans l'attente");
-            }
-        }
     }
 
     public static final void main(String []args) {
+        System.out.println("A");
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8")); //réassigne la sortie sur le flux de système standard
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Client client = new Client("http://127.0.0.1:10101");
+        Client client = new Client("http://127.0.0.1:10103");
         client.seConnecter();
         System.out.println("client : fin du main");
     }

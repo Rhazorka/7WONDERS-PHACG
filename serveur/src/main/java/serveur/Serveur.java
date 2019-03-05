@@ -149,7 +149,7 @@ public class Serveur {
         }
         Configuration config = new Configuration();
         config.setHostname("127.0.0.1");
-        config.setPort(10101);
+        config.setPort(10103);
 
         // permet de réutiliser l'adresse du port (fix linux)
         SocketConfig sockConfig = new SocketConfig();
