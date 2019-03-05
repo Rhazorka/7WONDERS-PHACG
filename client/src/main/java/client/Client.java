@@ -25,7 +25,6 @@ public class Client extends Thread {
     private String urlServeur;
 
     public Client(String urlServeur) {
-        System.out.println("C");
         this.urlServeur=urlServeur;
         try {
             connexion = IO.socket(urlServeur);
@@ -49,6 +48,7 @@ public class Client extends Thread {
                     }
                 }
             });
+            this.start();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -56,7 +56,6 @@ public class Client extends Thread {
     }
 
     private void seConnecter() {
-        System.out.println("D");
         connexion.connect();
         System.out.println("client : en attente de déconnexion");
         synchronized (attenteDeconnexion) {
@@ -70,31 +69,6 @@ public class Client extends Thread {
     }
 
     public void run(){
-        System.out.println("B");
-        Client.main(null);
-        try {
-            connexion = IO.socket(urlServeur);
-            System.out.println("client : on s'abonne à la connection / déconnection ");;
-            connexion.on("connect", new Emitter.Listener() {
-                @Override
-                public void call(Object... objects) {
-                    System.out.println("client : on est connecté et on s'identifie ");
-                    JSONObject id = new JSONObject(moi);
-                    connexion.emit("identification", id); //transmet l'objet moi au serveur
-                }
-            });
-            connexion.on("disconnect", new Emitter.Listener() {
-                @Override
-                public void call(Object... objects) {
-                    System.out.println("client : on est déconnecté");
-                    connexion.disconnect();
-                    connexion.close();
-                    synchronized (attenteDeconnexion) {
-                        attenteDeconnexion.notify();
-                    }
-                }
-            });
-
             connexion.on("requete", new Emitter.Listener() { // on recoit une requete de la part du serveur
                 @Override
                 public void call(Object... objects) {
@@ -126,20 +100,15 @@ public class Client extends Thread {
                     connexion.emit("distribution",json);
                 }
             });
-        } 
-        catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
     }
 
     public static final void main(String []args) {
-        System.out.println("A");
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8")); //réassigne la sortie sur le flux de système standard
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Client client = new Client("http://127.0.0.1:10103");
+        Client client = new Client("http://127.0.0.1:10101");
         client.seConnecter();
         System.out.println("client : fin du main");
     }

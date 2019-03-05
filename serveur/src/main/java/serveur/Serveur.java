@@ -64,8 +64,9 @@ public class Serveur {
                 System.out.println("serveur : le client est "+identification.getNom());
                 /*on créer le joueur*/
                 
-                Joueur joueur = new Joueur(p1,new Identification(identification.getNom()));
+                Joueur joueur = new Joueur(p1,identification);
                 listeJoueur.put(socketIOClient,joueur);
+                System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
                 //System.out.println("serveur : me1 = "+me1.toString());
                 //System.out.println("serveur : merv1 = "+p1);
                 distribPlateau(socketIOClient, p1);
@@ -91,7 +92,7 @@ public class Serveur {
                 Gson gson = new Gson();
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
                 for (Map.Entry mapentry : listeJoueur.entrySet()) {
-                    System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
+                    //System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
                     if(mapentry.getKey().equals(socketIOClient)){
                         Joueur jtemp = (Joueur)mapentry.getValue();
                         System.out.println("serveur : la réponse de  "+jtemp.getId().getNom()+" est "+carteChoisiJSON.toString());
@@ -149,7 +150,7 @@ public class Serveur {
         }
         Configuration config = new Configuration();
         config.setHostname("127.0.0.1");
-        config.setPort(10103);
+        config.setPort(10101);
 
         // permet de réutiliser l'adresse du port (fix linux)
         SocketConfig sockConfig = new SocketConfig();
