@@ -36,6 +36,8 @@
                 <configuration>
                     <source>1.8</source> <!-- éventuellement à changer : version de java -->
                     <target>1.8</target> <!-- éventuellement à changer : version de java -->
+                    <fork>true</fork>
+					<executable>C:\Program Files\Java\jdk1.8.0_121\bin\javac</executable>
                 </configuration>
             </plugin>
 

@@ -21,10 +21,17 @@ public class Partie {
             }
         });
 
-        Thread client2 = new Thread();
+        Thread client2 = new Thread(new Runnable(){
+            @Override
+            public void run(){
+                Client.main(null);
+            }
+        });
 
         serveur.start();
+        //client2.setPriority(Thread.MIN_PRIORITY);
         client1.start();
-        //client2.start();
+        client2.start();
+
     }
 }
