@@ -14,16 +14,22 @@ public class Partie {
             }
         });
 
-        Thread client = new Thread(new Runnable() {
+        Thread client1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 Client.main(null);
             }
         });
 
-        
-        serveur.start();
-        client.start();
+        Thread client2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Client.main(null);
+            }
+        });
 
+        serveur.start();
+        client1.start();
+        client2.start();
     }
 }

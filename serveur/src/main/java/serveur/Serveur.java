@@ -20,12 +20,13 @@ import commun.Carte;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Serveur {
 	private SocketIOServer serveur;
     private final Object attenteConnexion = new Object();
-    private Identification leClient ;
-    private Joueur j1;
+    private Map <SocketIOClient,Joueur> listeJoueur = new HashMap<SocketIOClient,Joueur>();
 
     public Serveur(Configuration config) {
         serveur = new SocketIOServer(config);
@@ -59,13 +60,14 @@ public class Serveur {
         serveur.addEventListener("identification", Identification.class, new DataListener<Identification>() {
             @Override
             public void onData(SocketIOClient socketIOClient, Identification identification, AckRequest ackRequest) throws Exception {
+                identification.setNom("Joueur "+listeJoueur.size());
                 System.out.println("serveur : le client est "+identification.getNom());
-                leClient = new Identification(identification.getNom());
-
-        		/*on créer le joueur*/
-        		j1 = new Joueur(p1,leClient);
-                System.out.println("serveur : me1 = "+me1.toString());
-                System.out.println("serveur : merv1 = "+p1);
+                /*on créer le joueur*/
+                
+                Joueur joueur = new Joueur(p1,new Identification(identification.getNom()));
+                listeJoueur.put(socketIOClient,joueur);
+                //System.out.println("serveur : me1 = "+me1.toString());
+                //System.out.println("serveur : merv1 = "+p1);
                 distribPlateau(socketIOClient, p1);
             }
         });
@@ -73,22 +75,31 @@ public class Serveur {
         serveur.addEventListener("distribution", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest) throws Exception {
-                System.out.println("serveur : la réponse de  "+leClient.getNom()+" est "+reponseJSON.toString());
-        		poserUneQuestion(socketIOClient,me1);
+                for (Map.Entry mapentry : listeJoueur.entrySet()) {
+                    //System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
+                    if(mapentry.getKey().equals(socketIOClient)){
+                        poserUneQuestion(socketIOClient,me1);
+                    }
+                }
             } 
         });
         // on attend une réponse
         serveur.addEventListener("requete", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String carteChoisiJSON, AckRequest ackRequest) throws Exception {
-                System.out.println("serveur : la réponse de  "+leClient.getNom()+" est "+carteChoisiJSON.toString());
-        		//j1.ajouterCarte(carteChoisi);
                 String jsonstr = carteChoisiJSON;  
                 Gson gson = new Gson();
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
+                for (Map.Entry mapentry : listeJoueur.entrySet()) {
+                    System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
+                    if(mapentry.getKey().equals(socketIOClient)){
+                        Joueur jtemp = (Joueur)mapentry.getValue();
+                        System.out.println("serveur : la réponse de  "+jtemp.getId().getNom()+" est "+carteChoisiJSON.toString());
+                        jtemp.ajouterCarte(carteChoisi);
+                        listeJoueur.replace((SocketIOClient)mapentry.getKey(), (Joueur)mapentry.getValue(),jtemp);
+                    }
+                }
                 System.out.println("serveur : carteChoisi = "+carteChoisi);
-                j1.ajouterCarte(carteChoisi);
-                System.out.println("serveur : points de victoires = "+j1.getPtsVictoire());
                 synchronized (attenteConnexion) {
                 	attenteConnexion.notify();
                 }

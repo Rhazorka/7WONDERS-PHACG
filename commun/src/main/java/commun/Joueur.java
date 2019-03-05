@@ -45,6 +45,9 @@ public class Joueur {
 		return piece;
 	}
 
+	public Identification getId(){
+		return id;
+	}
 
 
 	@Override

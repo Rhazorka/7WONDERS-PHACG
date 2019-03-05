@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Client {
-    private Identification moi = new Identification("Joueur 1");
+    private Identification moi = new Identification();
     private Socket connexion;
     private final Object attenteDeconnexion = new Object();
 
@@ -50,32 +50,31 @@ public class Client {
             connexion.on("requete", new Emitter.Listener() { // on recoit une requete de la part du serveur
                 @Override
                 public void call(Object... objects) {
-                    System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s)");
+                    //System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s)");
                     ArrayList<Carte> cartes = new ArrayList<Carte>();
                     System.out.println("client : recu = "+(String)objects[0]);
                     String jsonstr = (String) objects[0];  
                     Gson gson = new Gson();
                     Carte_victoire[] deck = gson.fromJson(jsonstr, Carte_victoire[].class);
-                    System.out.println("client : converti = :"+deck.toString());
+                    //System.out.println("client : converti = :"+deck.toString());
                     ArrayList<Carte> deckAL = new ArrayList<Carte>(Arrays.asList(deck));
                     Moteur motemp = new Moteur(deckAL);
                     Carte carteChoisi = motemp.choisirCarte();
                     System.out.println("client : carteChoisi = "+carteChoisi.toString());
-                	String json = new Gson().toJson(carteChoisi);
+                    String json = new Gson().toJson(carteChoisi);
                     connexion.emit("requete",json);
                 }
             });
             connexion.on("distribution", new Emitter.Listener() { // on recoit une requete de la part du serveur avec le plateau
                 @Override
                 public void call(Object... objects) {
-                    System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s) ");
-                    String rep ="nop";
-                    if(objects.length>0)
-                    {
+                    //System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s) ");
+                    Boolean rep =false;
+                    if(objects.length>0){
                         System.out.println("client : recu = "+(String)objects[0]);
-                        rep="ok";
+                        rep=true;
                     }
-                	String json = new Gson().toJson(rep);
+                    String json = new Gson().toJson(rep);
                     connexion.emit("distribution",json);
                 }
             });
@@ -110,3 +109,4 @@ public class Client {
         System.out.println("client : fin du main");
     }
 }
+

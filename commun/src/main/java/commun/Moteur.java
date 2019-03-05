@@ -10,7 +10,9 @@ public class Moteur {
 	public Moteur(ArrayList<Carte> cartes) {
 		super();
 		this.cartes = cartes;
-	}	public Carte choisirCarte() {
+	}	
+	
+	public Carte choisirCarte() {
 		Carte ret;
 		System.out.println("Le bot choisi le numéro de la carte qu'il va jouer : ");
 		for (Carte c : cartes) {
