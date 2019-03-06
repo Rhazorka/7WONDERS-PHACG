@@ -69,37 +69,37 @@ public class Client extends Thread {
     }
 
     public void run(){
-            connexion.on("requete", new Emitter.Listener() { // on recoit une requete de la part du serveur
-                @Override
-                public void call(Object... objects) {
-                    //System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s)");
-                    ArrayList<Carte> cartes = new ArrayList<Carte>();
-                    System.out.println("client : recu = "+(String)objects[0]);
-                    String jsonstr = (String) objects[0];  
-                    Gson gson = new Gson();
-                    Carte_victoire[] deck = gson.fromJson(jsonstr, Carte_victoire[].class);
-                    //System.out.println("client : converti = :"+deck.toString());
-                    ArrayList<Carte> deckAL = new ArrayList<Carte>(Arrays.asList(deck));
-                    Moteur motemp = new Moteur(deckAL);
-                    Carte carteChoisi = motemp.choisirCarte();
-                    System.out.println("client : carteChoisi = "+carteChoisi.toString());
-                    String json = new Gson().toJson(carteChoisi);
-                    connexion.emit("requete",json);
+        connexion.on("choixCarte", new Emitter.Listener() { // on recoit une requete de la part du serveur
+            @Override
+            public void call(Object... objects) {
+                //System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s)");
+                ArrayList<Carte> cartes = new ArrayList<Carte>();
+                System.out.println("client : recu Deck = "+(String)objects[0]);
+                String jsonstr = (String) objects[0];  
+                Gson gson = new Gson();
+                Carte_victoire[] deck = gson.fromJson(jsonstr, Carte_victoire[].class);
+                //System.out.println("client : converti = :"+deck.toString());
+                ArrayList<Carte> deckAL = new ArrayList<Carte>(Arrays.asList(deck));
+                Moteur motemp = new Moteur(deckAL);
+                Carte carteChoisi = motemp.choisirCarte();
+                System.out.println("client : carteChoisi = "+carteChoisi.toString());
+                String json = new Gson().toJson(carteChoisi);
+                connexion.emit("choixCarte",json);
+            }
+        });
+        connexion.on("distributionPlateau", new Emitter.Listener() { // on recoit une requete de la part du serveur avec le plateau
+            @Override
+            public void call(Object... objects) {
+                //System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s) ");
+                Boolean rep =false;
+                if(objects.length>0){
+                    System.out.println("client : recu Plateau = "+(String)objects[0]);
+                    rep=true;
                 }
-            });
-            connexion.on("distribution", new Emitter.Listener() { // on recoit une requete de la part du serveur avec le plateau
-                @Override
-                public void call(Object... objects) {
-                    //System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s) ");
-                    Boolean rep =false;
-                    if(objects.length>0){
-                        System.out.println("client : recu = "+(String)objects[0]);
-                        rep=true;
-                    }
-                    String json = new Gson().toJson(rep);
-                    connexion.emit("distribution",json);
-                }
-            });
+                String json = new Gson().toJson(rep);
+                connexion.emit("distributionPlateau",json);
+            }
+        });
     }
 
     public static final void main(String []args) {

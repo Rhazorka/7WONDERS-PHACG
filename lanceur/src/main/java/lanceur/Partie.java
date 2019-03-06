@@ -1,12 +1,15 @@
 package lanceur;
 
 import client.Client;
+import commun.Joueur;
 import serveur.Serveur;
 
 public class Partie {
+    private static int nbJoueur=1;
 
     public final static void main(String [] args) {
 
+        
         Thread serveur = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -14,23 +17,22 @@ public class Partie {
             }
         });
 
-        Thread client1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Client.main(null);
-            }
-        });
-
-        Thread client2 = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                Client.main(null);
-            }
-        });
-
         serveur.start();
-        client1.start();
-        //client2.start();
 
+        Thread[] listeJoueurs=new Thread[nbJoueur];
+
+        for(int i=0;i<nbJoueur;i++){
+            Thread client = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Client.main(null);
+                }
+            });
+            listeJoueurs[i]=client;
+        }
+
+        for(int i=0;i<nbJoueur;i++){
+            listeJoueurs[i].start();
+        }
     }
 }

@@ -76,7 +76,7 @@ public class Serveur {
             }
         });
 
-        serveur.addEventListener("distribution", String.class, new DataListener<String>() {
+        serveur.addEventListener("distributionPlateau", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest) throws Exception {
                 for (Map.Entry mapentry : listeJoueur.entrySet()) {
@@ -88,7 +88,7 @@ public class Serveur {
             } 
         });
         // on attend une réponse
-        serveur.addEventListener("requete", String.class, new DataListener<String>() {
+        serveur.addEventListener("choixCarte", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String carteChoisiJSON, AckRequest ackRequest) throws Exception {
                 String jsonstr = carteChoisiJSON;  
@@ -96,12 +96,13 @@ public class Serveur {
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
                 for (Map.Entry mapentry : listeJoueur.entrySet()) {
                     //System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
-                    if(mapentry.getKey().equals(socketIOClient)){
-                        Joueur jtemp = (Joueur)mapentry.getValue();
+                    if(mapentry.getValue().equals(socketIOClient)){
+                        Joueur jtemp = (Joueur)mapentry.getKey();
                         System.out.println("serveur : la réponse de  "+jtemp.getId().getNom()+" est "+carteChoisiJSON.toString());
                         jtemp.ajouterCarte(carteChoisi);
-                        //SocketIOClient old = listeJoueur.remove(mapentry.getKey());
-                        //listeJoueur.put(jtemp,old);
+                        SocketIOClient old = listeJoueur.remove(mapentry.getKey());
+                        listeJoueur.put(jtemp,old);
+                        System.out.println("serveur : le "+jtemp.getId().getNom()+" a maintenant "+jtemp.getPtsVictoire()+" pts de victoires");
                         //listeJoueur.replace((Joueur)mapentry.getValue(),(SocketIOClient)mapentry.getKey(),jtemp);
                     }
                 }
@@ -114,7 +115,7 @@ public class Serveur {
     }
 
 
-    private void demarrer() {
+    public void demarrer() {
         serveur.start();
         System.out.println("serveur : en attente de connexion");
         synchronized (attenteConnexion) {
@@ -136,12 +137,12 @@ public class Serveur {
     {
         Gson gson = new Gson();
     	String json = new Gson().toJson(pl);
-        socketIOClient.sendEvent("distribution",json);
+        socketIOClient.sendEvent("distributionPlateau",json);
     }
     private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
     	Gson gson = new Gson();
     	String json = new Gson().toJson(deck);
-        socketIOClient.sendEvent("requete",json);
+        socketIOClient.sendEvent("choixCarte",json);
     }
 
 
