@@ -23,6 +23,7 @@ public class Client extends Thread {
     private Socket connexion;
     private final Object attenteDeconnexion = new Object();
     private String urlServeur;
+    public boolean test = false;
 
     public Client(String urlServeur) {
         this.urlServeur=urlServeur;
@@ -55,7 +56,7 @@ public class Client extends Thread {
 
     }
 
-    private void seConnecter() {
+    public void seConnecter() {
         connexion.connect();
         System.out.println("client : en attente de déconnexion");
         synchronized (attenteDeconnexion) {
@@ -69,6 +70,7 @@ public class Client extends Thread {
     }
 
     public void run(){
+        test = true;
             connexion.on("requete", new Emitter.Listener() { // on recoit une requete de la part du serveur
                 @Override
                 public void call(Object... objects) {
@@ -100,6 +102,10 @@ public class Client extends Thread {
                     connexion.emit("distribution",json);
                 }
             });
+    }
+
+    public boolean getTest(){
+        return test;
     }
 
     public static final void main(String []args) {
