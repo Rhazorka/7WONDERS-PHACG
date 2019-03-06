@@ -29,9 +29,8 @@ public class Partie {
         });
 
         serveur.start();
-        //client2.setPriority(Thread.MIN_PRIORITY);
         client1.start();
-        client2.start();
+        //client2.start();
 
     }
 }

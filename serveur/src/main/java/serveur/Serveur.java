@@ -26,7 +26,7 @@ import java.util.Map;
 public class Serveur {
 	private SocketIOServer serveur;
     private final Object attenteConnexion = new Object();
-    private Map <SocketIOClient,Joueur> listeJoueur = new HashMap<SocketIOClient,Joueur>();
+    private Map <Joueur,SocketIOClient> listeJoueur = new HashMap<Joueur,SocketIOClient>();
 
     public Serveur(Configuration config) {
         serveur = new SocketIOServer(config);
@@ -65,7 +65,10 @@ public class Serveur {
                 /*on créer le joueur*/
                 
                 Joueur joueur = new Joueur(p1,identification);
-                listeJoueur.put(socketIOClient,joueur);
+                listeJoueur.put(joueur,socketIOClient);
+                /*for (Map.Entry mapentry : listeJoueur.entrySet()) {
+                    System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
+                }*/
                 System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
                 //System.out.println("serveur : me1 = "+me1.toString());
                 //System.out.println("serveur : merv1 = "+p1);
@@ -78,7 +81,7 @@ public class Serveur {
             public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest) throws Exception {
                 for (Map.Entry mapentry : listeJoueur.entrySet()) {
                     //System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
-                    if(mapentry.getKey().equals(socketIOClient)){
+                    if(mapentry.getValue().equals(socketIOClient)){
                         poserUneQuestion(socketIOClient,me1);
                     }
                 }
@@ -97,7 +100,9 @@ public class Serveur {
                         Joueur jtemp = (Joueur)mapentry.getValue();
                         System.out.println("serveur : la réponse de  "+jtemp.getId().getNom()+" est "+carteChoisiJSON.toString());
                         jtemp.ajouterCarte(carteChoisi);
-                        listeJoueur.replace((SocketIOClient)mapentry.getKey(), (Joueur)mapentry.getValue(),jtemp);
+                        //SocketIOClient old = listeJoueur.remove(mapentry.getKey());
+                        //listeJoueur.put(jtemp,old);
+                        //listeJoueur.replace((Joueur)mapentry.getValue(),(SocketIOClient)mapentry.getKey(),jtemp);
                     }
                 }
                 System.out.println("serveur : carteChoisi = "+carteChoisi);
