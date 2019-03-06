@@ -38,23 +38,38 @@ public class Serveur {
         });
 		Ressource[] r1 = {Ressource.PIERRE,Ressource.PIERRE};
 		Carte_victoire c1 = new Carte_victoire("victoire_3",r1,3);
-		
+		Carte_victoire c4 = new Carte_victoire("victoire_5",r1,5);
+
 		Ressource[] r2 = {Ressource.BOIS,Ressource.BOIS,Ressource.BOIS};
 		Carte_victoire c2 = new Carte_victoire("victoire_5",r2,5);
-		
+		Carte_victoire c5 = new Carte_victoire("victoire_7",r2,3);
+
 		Ressource[] r3 = {Ressource.PIERRE,Ressource.PIERRE,Ressource.PIERRE,Ressource.PIERRE};
 		Carte_victoire c3 = new Carte_victoire("victoire_7",r3,7);
+        Carte_victoire c6 = new Carte_victoire("victoire_3",r3,3);
 
 		ArrayList<Carte> me1 = new ArrayList<>();
 		me1.add(c1);
 		me1.add(c2);
 		me1.add(c3);
+
+        ArrayList<Carte> me2 = new ArrayList();
+        me2.add(c4);
+        me2.add(c5);
+        me2.add(c6);
 		
 		Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
+        Plateau p2 = new Plateau("Alexandrie", Ressource.BOIS,me2);
+
+        ArrayList<Plateau> deck_plat = new ArrayList();
+        deck_plat.add(p1);
+        deck_plat.add(p2);
 
 		Moteur mo1 = new Moteur(me1);
+        Moteur mo2 = new Moteur(me2);
 
 		mo1.melangerCartes();
+        mo2.melangerCartes();
 
         //réception d'une identification
         serveur.addEventListener("identification", Identification.class, new DataListener<Identification>() {
@@ -63,16 +78,19 @@ public class Serveur {
                 identification.setNom("Joueur "+listeJoueur.size());
                 System.out.println("serveur : le client est "+identification.getNom());
                 /*on créer le joueur*/
-                
-                Joueur joueur = new Joueur(p1,identification);
-                listeJoueur.put(joueur,socketIOClient);
-                /*for (Map.Entry mapentry : listeJoueur.entrySet()) {
-                    System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
-                }*/
-                System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
-                //System.out.println("serveur : me1 = "+me1.toString());
-                //System.out.println("serveur : merv1 = "+p1);
-                distribPlateau(socketIOClient, p1);
+
+                /* un joueur est identifié tant qu'il reste des plateaux dans le deck */
+                for(Plateau plat : deck_plat){
+                    Joueur joueur = new Joueur(plat,identification);
+                    listeJoueur.put(joueur,socketIOClient);
+                    /*for (Map.Entry mapentry : listeJoueur.entrySet()) {
+                        System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
+                    }*/
+                    System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
+                    //System.out.println("serveur : me1 = "+me1.toString());
+                    //System.out.println("serveur : merv1 = "+p1);
+                    distribPlateau(socketIOClient, plat);
+                }
             }
         });
 
