@@ -17,6 +17,13 @@ public class Joueur {
 		this.piece = 3; //Le joueur a trois pièces de base
 		this.ptsVictoire = 0;
 	}
+
+	public Joueur(Identification id){
+		this.plateau = plateau;
+		this.id = id;
+		this.piece = 3; //Le joueur a trois pièces de base
+		this.ptsVictoire = 0;
+	}
 	
 	public void ajouterCarte(Carte carte) {
 		cartes.add(carte);

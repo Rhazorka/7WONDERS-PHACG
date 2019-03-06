@@ -80,8 +80,9 @@ public class Serveur {
                 /*on créer le joueur*/
 
                 /* un joueur est identifié tant qu'il reste des plateaux dans le deck */
-                for(Plateau plat : deck_plat){
-                    Joueur joueur = new Joueur(plat,identification);
+                //for(Plateau plat : deck_plat){
+                    Joueur joueur = new Joueur(identification);
+                    //Joueur joueur = new Joueur(plat,identification);
                     listeJoueur.put(joueur,socketIOClient);
                     /*for (Map.Entry mapentry : listeJoueur.entrySet()) {
                         System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
@@ -89,8 +90,9 @@ public class Serveur {
                     System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
                     //System.out.println("serveur : me1 = "+me1.toString());
                     //System.out.println("serveur : merv1 = "+p1);
-                    distribPlateau(socketIOClient, plat);
-                }
+                    //distribPlateau(socketIOClient, plat);
+                    distribPlateau(socketIOClient,p1);
+                //}
             }
         });
 
