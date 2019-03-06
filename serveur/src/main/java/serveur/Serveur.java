@@ -27,7 +27,6 @@ public class Serveur {
 	private SocketIOServer serveur;
     private final Object attenteConnexion = new Object();
     private Map <Joueur,SocketIOClient> listeJoueur = new HashMap<Joueur,SocketIOClient>();
-    public boolean test = true;
 
     public Serveur(Configuration config) {
         serveur = new SocketIOServer(config);
@@ -115,9 +114,8 @@ public class Serveur {
     }
 
 
-    public void demarrer() {
+    private void demarrer() {
         serveur.start();
-        test = true;
         System.out.println("serveur : en attente de connexion");
         synchronized (attenteConnexion) {
             try {
@@ -146,9 +144,7 @@ public class Serveur {
         socketIOClient.sendEvent("requete",json);
     }
 
-    public boolean getTest(){
-        return test;
-    }
+
 
     public static final void main(String []args) {
         try {
