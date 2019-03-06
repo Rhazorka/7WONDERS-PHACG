@@ -2,18 +2,11 @@ package commun;
 
 public class Carte_ressource extends Carte {
     private Ressource[] ressources;
-    
+    private int cout;
 	
-	public Carte_ressource(String nom, Ressource[] ressources) { 
+	public Carte_ressource(String nom, int cout, Ressource[] ressources) {
 		super(nom);
-        this.ressources = ressources;
-	}
-	public Carte_ressource(String nom, int prix, Ressource[] ressources) { 
-		super(nom, prix);
-        this.ressources = ressources;
-	}
-	public Carte_ressource(String nom,Ressource[] cout, Ressource[] ressources) { 
-		super(nom,cout);
+        this.cout=cout;
         this.ressources = ressources;
 	}
 
