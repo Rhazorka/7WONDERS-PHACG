@@ -1,7 +1,6 @@
 package lanceur;
 
 import client.Client;
-import commun.Joueur;
 import serveur.Serveur;
 
 public class Partie {
@@ -33,6 +32,6 @@ public class Partie {
 
         for(int i=0;i<nbJoueur;i++){
             listeJoueurs[i].start();
-        }
+        }  
     }
 }
