@@ -40,7 +40,7 @@ public class MoteurTest {
 		me1.add(c2);
 			
 		/*on mélange les cartes*/
-		mo1.melangerCartes();
+		mo1.melangerDeck_A1();
 		
 		/*on choisi une carte*/
 		j1.ajouterCarte(mo1.choisirCarte());

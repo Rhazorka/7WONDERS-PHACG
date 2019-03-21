@@ -1,7 +1,7 @@
 package commun;
 
 public class Carte_ressource extends Carte {
-    private Ressource[] ressources;
+    private transient Ressource[] ressources;
 	
 	public Carte_ressource(String nom, Ressource[] ressources) {
 		super(nom);
