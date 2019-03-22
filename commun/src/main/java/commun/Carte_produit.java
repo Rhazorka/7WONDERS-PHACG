@@ -1,7 +1,8 @@
 package commun;
 
 public class Carte_produit extends Carte {
-    private Ressource[] ressources;
+	private Ressource[] ressources;
+	private boolean Ou;
 	
 	public Carte_produit(String nom, Ressource[] ressources) {
 		super(nom);
@@ -14,6 +15,15 @@ public class Carte_produit extends Carte {
 	public Carte_produit(String nom, Ressource[] cout, Ressource[] ressources) {
 		super(nom, cout);
 		this.ressources=ressources;
+	}
+
+	public Ressource[] getRessource()
+	{
+		return ressources;
+	}
+	public boolean getOu()
+	{
+		return Ou;
 	}
 
 	@Override

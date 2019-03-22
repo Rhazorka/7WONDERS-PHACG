@@ -13,6 +13,10 @@ public class Plateau {
 		this.etape = etape;
 	}
 
+	public Ressource getRessourcePrincipale() {
+		return ressourcePrincipale;
+	}
+
 	@Override
 	public String toString() {
 		return "Plateau [nom=" + nom + ", ressourcePrincipale=" + ressourcePrincipale + ", etape=" + etape + "]";

@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Client<client>",
+            "request": "launch",
+            "mainClass": "client.Client",
+            "projectName": "client"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Partie<lanceur>",
+            "request": "launch",
+            "mainClass": "lanceur.Partie",
+            "projectName": "lanceur"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Serveur<serveur>",
+            "request": "launch",
+            "mainClass": "serveur.Serveur",
+            "projectName": "serveur"
+        }
+    ]
+}
