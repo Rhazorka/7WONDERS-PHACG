@@ -15,18 +15,18 @@ import commun.Carte;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.rmi.NotBoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Client {
     private Identification moi = new Identification();
     private Socket connexion;
-    private final Object attenteDeconnexion = new Object();
+//    private final Object attenteDeconnexion = new Object();
     private final Object lock = new Object();
 
-    public Client(String urlServeur) {
+    public Client(String urlServeur, String nom) {
         try {
+            moi.setNom(nom);
             connexion = IO.socket(urlServeur);
             System.out.println("client : on s'abonne à la connection / déconnection ");
 
@@ -44,17 +44,13 @@ public class Client {
                     System.out.println("client : on est déconnecté");
                     connexion.disconnect();
                     connexion.close();
-                    synchronized (attenteDeconnexion) {
-                        attenteDeconnexion.notify();
-                    }
+                    System.exit(0);
                 }
             });
             connexion.on("choixCarte", new Emitter.Listener() { // on recoit une requete de la part du serveur
                 @Override
                 public void call(Object... objects) {
                     synchronized (lock) {
-                        // System.out.println("client : on a reçu une requête avec "+objects.length+"
-                        // paramètre(s)");
                         ArrayList<Carte> cartes = new ArrayList<Carte>();
                         System.out.println("client : recu Deck = " + (String) objects[0]);
                         String jsonstr = (String) objects[0];
@@ -93,9 +89,11 @@ public class Client {
 
     }
 
-    private void seConnecter() {
+    public void seConnecter() {
         connexion.connect();
         System.out.println("client : en attente de déconnexion");
+
+        /*
         synchronized (attenteDeconnexion) {
             try {
                 attenteDeconnexion.wait();
@@ -103,7 +101,7 @@ public class Client {
                 e.printStackTrace();
                 System.err.println("client : erreur dans l'attente");
             }
-        }
+        } */
     }
 
     public static final void main(String []args) {
@@ -112,7 +110,7 @@ public class Client {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Client client = new Client("http://127.0.0.1:10101");
+        Client client = new Client("http://127.0.0.1:10101", "toto");
         client.seConnecter();
         System.out.println("client : fin du main");
     }

@@ -22,15 +22,23 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 public class Serveur {
+
+
+    public final static int NB_JOUEURS = 3;
+
 	private SocketIOServer serveur;
-    private final Object attenteConnexion = new Object();
+   // private final Object attenteConnexion = new Object();
     private Map <String,Joueur> listeJoueur = new HashMap<String,Joueur>();
     private final Object lock = new Object();
 
+    // temporaire : un joueur doit avoir son deck
+    ArrayList<Carte> me1 ;
+
     public Serveur(Configuration config) { 
+        razCompteurNbCoupDuTour();
+
         serveur = new SocketIOServer(config);
         System.out.println("serveur : préparation du listener");
         serveur.addConnectListener(new ConnectListener() {
@@ -41,33 +49,19 @@ public class Serveur {
 
         Moteur mo1 = new Moteur();
         Plateau p1 = mo1.getGizah_a();
-        ArrayList<Carte> me1 = mo1.getdeckA1();        
-
+        me1 = mo1.getdeckA1();        
         mo1.melangerDeck_A1();
 
-        //réception d'une identification
         serveur.addEventListener("identification", Identification.class, new DataListener<Identification>() {
             @Override
             public void onData(SocketIOClient socketIOClient, Identification identification, AckRequest ackRequest) throws Exception {
                 synchronized(lock){
                     identification.setNom("Joueur "+listeJoueur.size());
                     System.out.println("serveur : le client est "+identification.getNom());
-                    /*on créer le joueur*/
-    
-                    /* un joueur est identifié tant qu'il reste des plateaux dans le deck */
-                    //for(Plateau plat : deck_plat){
-                        //Joueur joueur = new Joueur(plat,identification);
-                        System.out.println("serveur : remote adress : "+socketIOClient.getRemoteAddress().toString());
-                        System.out.println("serveur : UIID : "+socketIOClient.getSessionId().toString());
-                        System.out.println("serveur : namespace : "+socketIOClient.getNamespace().toString());
-                        listeJoueur.put(socketIOClient.getRemoteAddress().toString(),new Joueur(identification));
-                        /*for (Map.Entry mapentry : listeJoueur.entrySet()) {
-                            System.out.println("clé: "+mapentry.getKey() + " | valeur: " + mapentry.getValue());
-                        }*/
-                        System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
-                        //distribPlateau(socketIOClient, plat);
-                        distribPlateau(socketIOClient,p1);
-                    //}
+                    System.out.println("serveur : remote address : "+socketIOClient.getRemoteAddress().toString());
+                    listeJoueur.put(socketIOClient.getRemoteAddress().toString(),new Joueur(identification));
+                    System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
+                    distribPlateau(socketIOClient,p1);
                 }
             }
         });
@@ -75,12 +69,8 @@ public class Serveur {
         serveur.addEventListener("distributionPlateau", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest) throws Exception {
-                synchronized(lock){
-                    for (Map.Entry mapentry : listeJoueur.entrySet()) {
-                        if(mapentry.getKey().equals(socketIOClient.getRemoteAddress().toString())){
-                            poserUneQuestion(socketIOClient,me1);
-                        }
-                    }
+                if (tousLesJoueursOntJoue()) {
+                    faireUnTourDejeu();
                 }
             } 
         });
@@ -91,44 +81,49 @@ public class Serveur {
                 String jsonstr = carteChoisiJSON;  
                 Gson gson = new Gson();
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
-                for (Map.Entry mapentry : listeJoueur.entrySet()) {
-                    if(mapentry.getKey().equals(socketIOClient.getRemoteAddress().toString())){
-                        Joueur jtemp = (Joueur)mapentry.getValue();
-                        System.out.println("serveur : la réponse de  "+jtemp.getId().getNom()+" est "+carteChoisiJSON.toString());
-                        jtemp.ajouterCarte(carteChoisi);
-                        String keytemp = (String)mapentry.getKey();
-                        listeJoueur.remove(mapentry.getKey());
-                        listeJoueur.put(keytemp, jtemp);
-                        jtemp.ajouterCarte(carteChoisi);                        
-                        System.out.println("serveur : le "+jtemp.getId().getNom()+" a maintenant "+jtemp.getPtsVictoire()+" pts de victoires");
-                    }
-                }
+                
+                Joueur leJoueur = listeJoueur.get(socketIOClient.getRemoteAddress().toString());
+                leJoueur.ajouterCarte(carteChoisi);
+                System.out.println("serveur : le "+leJoueur.getId().getNom()+" a maintenant "+leJoueur.getPtsVictoire()+" pts de victoires");
                 System.out.println("serveur : carteChoisi = "+carteChoisi);
-                synchronized (attenteConnexion) {
-                	attenteConnexion.notify();
+
+                if (tousLesJoueursOntJoue()) {
+                    System.out.println("------------------------------------------------------------------------------------");
+                    serveur.stop(); // ou on fait un tour de plus ou on change d'age ou on a fini
+                    System.exit(0);
                 }
             } 
         });
     }
 
+    synchronized boolean tousLesJoueursOntJoue() {
+        nbCoupDuTour++;
+        return (nbCoupDuTour >= NB_JOUEURS);
+    }
+
+    private int nbCoupDuTour = 0;
+    synchronized void razCompteurNbCoupDuTour() {
+        nbCoupDuTour = 0;
+    }
+
+    void faireUnTourDejeu() {
+        razCompteurNbCoupDuTour();
+        for( SocketIOClient s : serveur.getAllClients()) {
+            Joueur j = listeJoueur.get(s.getRemoteAddress().toString());
+            poserUneQuestion(s, me1); // ou plutot j.getDeck();
+        }
+    }
 
     public void demarrer() {
         serveur.start();
         System.out.println("serveur : en attente de connexion");
-        synchronized (attenteConnexion) {
-            try {
-                attenteConnexion.wait();
-            } 
-            catch (InterruptedException e) {
-                e.printStackTrace();
-                System.err.println("serveur : erreur dans l'attente");
-            }
-        }
+        /*
         System.out.println("serveur : une connexion est arrivée, on arrête");
         serveur.stop();
 
         //On tue le programme 
         System.exit(0);
+        */
     }
     private void distribPlateau(SocketIOClient socketIOClient, Plateau pl)
     {
@@ -138,11 +133,9 @@ public class Serveur {
     }
     private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
     	Gson gson = new Gson();
-    	String json = new Gson().toJson(deck);
+        String json = new Gson().toJson(deck);
         socketIOClient.sendEvent("choixCarte",json);
     }
-
-
 
     public static final void main(String []args) {
         try {
