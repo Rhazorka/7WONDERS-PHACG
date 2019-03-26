@@ -18,6 +18,6 @@ public class Carte_victoire extends Carte {
 
 	@Override
 	public void effet(Joueur j) {
-		j.setPtsVictoire(pts);
+		j.ajouterPtsVictoire(pts);
 	}
 }

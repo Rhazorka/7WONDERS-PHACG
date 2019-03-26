@@ -28,10 +28,15 @@ public class Joueur {
 	public void ajouterCarte(Carte carte) {
 		cartes.add(carte);
 		carte.effet(this);
+		setPiece(this.getPiece()-carte.getPrix());
 	}
 
 	public ArrayList<Carte> getCartes(){
 		return cartes;
+	}
+
+	public void ajouterPtsVictoire(int nb){
+		setPtsVictoire(ptsVictoire+nb);
 	}
 
 	//Setter et getter
@@ -65,7 +70,7 @@ public class Joueur {
 		{
 			if(this.getPiece()>=laCarte.getPrix())
 			{
-				this.setPiece(this.getPiece()-laCarte.getPrix());
+				//this.setPiece(this.getPiece()-laCarte.getPrix());  //Retirer le nb de pièces si il la joue 
 				return true;
 			}
 		}
