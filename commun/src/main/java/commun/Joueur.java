@@ -56,40 +56,6 @@ public class Joueur {
 		return id;
 	}
 
-	/*public Ressource[] getLesRessDuJ() //fait et retourne une liste de toutes les ressources que le joueur a
-	{
-		Ressource[] RessDuJ = new Ressource[45];
-		int j = 0;
-		Carte_ressource CarteResTMP;
-		Carte_produit CarteProdTMP;
-		
-		for(int i=0; i<this.cartes.size(); i++ )
-		{
-			
-			if(cartes.get(i) instanceof Carte_ressource)
-			{
-				System.out.println("carte r");
-				CarteResTMP = (Carte_ressource)cartes.get(i);
-				for( Ressource uneRess : CarteResTMP.getRessource())
-				{
-					RessDuJ[j]=uneRess;
-					j+=1;
-				}
-			}
-			else if(cartes.get(i) instanceof Carte_produit)
-			{
-				CarteProdTMP = (Carte_produit)cartes.get(i);
-				for( Ressource uneRess : CarteProdTMP.getRessource())
-				{
-					RessDuJ[j]=uneRess;
-					j+=1;
-				}
-			}
-		}
-		RessDuJ[j]=this.plateau.getRessourcePrincipale();
-		return RessDuJ;
-	}*/
-
 	public boolean AcheterCarte(Carte laCarte)
 	{
 		Ressource[] RessCoutTMP = laCarte.getCout();
