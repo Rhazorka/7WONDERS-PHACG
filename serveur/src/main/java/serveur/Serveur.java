@@ -55,7 +55,12 @@ public class Serveur {
                     System.out.println("serveur : remote address : "+socketIOClient.getRemoteAddress().toString());
                     listeJoueur.put(socketIOClient.getRemoteAddress().toString(),new Joueur(identification));
                     System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
-                    distribPlateau(socketIOClient,p1);
+                    sockettemp.add(socketIOClient);
+                    if(tousLesJoueurSontConnecte()){
+                        for(SocketIOClient s : sockettemp){ //ca fonctionne comme ca pour l'instant mais je changerai la HashMap plus tard
+                            distribPlateau(s, p1);
+                        }
+                    }
                     listeJoueur.get(socketIOClient.getRemoteAddress().toString()).ajouterPlateau(p1);  // ajoute le plateau dans leJoueur
                 }
             }
