@@ -24,21 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Serveur {
-
-
     public final static int NB_JOUEURS = 3;
-
 	private SocketIOServer serveur;
-   // private final Object attenteConnexion = new Object();
     private Map <String,Joueur> listeJoueur = new HashMap<String,Joueur>();
     private final Object lock = new Object();
-
-    // temporaire : un joueur doit avoir son deck
-    ArrayList<Carte> me1 ;
+    ArrayList<Carte> me1 ; // temporaire : un joueur doit avoir son deck
 
     public Serveur(Configuration config) { 
         razCompteurNbCoupDuTour();
-
         serveur = new SocketIOServer(config);
         System.out.println("serveur : préparation du listener");
         serveur.addConnectListener(new ConnectListener() {
@@ -51,6 +44,7 @@ public class Serveur {
         Plateau p1 = mo1.getGizah_a();
         me1 = mo1.getdeckA1();        
         mo1.melangerDeck_A1();
+        ArrayList<SocketIOClient> sockettemp = new ArrayList<SocketIOClient>();
 
         serveur.addEventListener("identification", Identification.class, new DataListener<Identification>() {
             @Override
@@ -81,8 +75,7 @@ public class Serveur {
             public void onData(SocketIOClient socketIOClient, String carteChoisiJSON, AckRequest ackRequest) throws Exception {
                 String jsonstr = carteChoisiJSON;  
                 Gson gson = new Gson();
-                Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
-                
+                Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);        
                 Joueur leJoueur = listeJoueur.get(socketIOClient.getRemoteAddress().toString());
                 leJoueur.ajouterCarte(carteChoisi);
                 System.out.println("serveur : le "+leJoueur.getId().getNom()+" a maintenant "+leJoueur.getPtsVictoire()+" pts de victoires");
@@ -111,6 +104,13 @@ public class Serveur {
         nbCoupDuTour = 0;
     }
 
+    synchronized boolean tousLesJoueurSontConnecte(){
+        if(listeJoueur.size()==NB_JOUEURS)
+            return true;
+        else
+            return false;
+    }
+
     void faireUnTourDejeu() {
         razCompteurNbCoupDuTour();
         int k = 0;
@@ -132,12 +132,13 @@ public class Serveur {
         System.exit(0);
         */
     }
-    private void distribPlateau(SocketIOClient socketIOClient, Plateau pl)
-    {
+
+    private void distribPlateau(SocketIOClient socketIOClient, Plateau pl) {
         Gson gson = new Gson();
     	String json = new Gson().toJson(pl);
         socketIOClient.sendEvent("distributionPlateau",json);
     }
+    
     private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
     	Gson gson = new Gson();
         String json = new Gson().toJson(deck);
