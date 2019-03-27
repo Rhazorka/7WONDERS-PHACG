@@ -18,4 +18,6 @@ En développant les tests du MoteurTest, notamment pour récupérer le toString(
 
 3. Gestion de la distribution des mains (de 3 cartes actuellement) à partir du deck de l'Age 1, par joueur.
 
+## reporté à l'itération suivante
 
+1. l'appelle de la méthode AcheterCartes() qui vérifie si le joueur peut acheter une carte, dans le déroulement d'une partie (Gautier + Alexandre)
