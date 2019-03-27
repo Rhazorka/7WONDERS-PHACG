@@ -3,6 +3,7 @@ package commun;
 //import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class MoteurTest {
 	/*on crée le moteur*/
 	Moteur moteur = new Moteur();
 	Moteur M_temp = new Moteur();
-	ArrayList<Carte> DeckAge1_temp = moteur.getdeckA1();
+	ArrayList<Carte> DeckAge1_temp = M_temp.getdeckA1();
 	
 	// Test instance des plateaux
 	ArrayList<Plateau> DeckPlateau = moteur.get_deckPlateaux();
@@ -61,6 +62,13 @@ public class MoteurTest {
 		j1.ajouterCarte(preteur_sur_gageTest);
 		assertTrue(Sjoueur.equals(j1.toString())); // test si le plateau et la carte ajoutés ont bien été ajouté dans la donnée du joueur
 		
+		M_temp.melangerDeck_A1();
+		Carte[] deckA1 = new Carte[DeckAge1.size()];
+		Carte[] deckA1_temp = new Carte[DeckAge1_temp.size()];
+		
+		assertTrue(!Arrays.equals(DeckAge1_temp.toArray(deckA1_temp),DeckAge1.toArray(deckA1) )); //test si les cartes du deck de l'age 1 se mélangent correctement
+
+
 	}
 
 }
