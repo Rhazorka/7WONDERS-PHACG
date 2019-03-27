@@ -24,21 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Serveur {
-
-
     public final static int NB_JOUEURS = 3;
-
 	private SocketIOServer serveur;
-   // private final Object attenteConnexion = new Object();
     private Map <String,Joueur> listeJoueur = new HashMap<String,Joueur>();
     private final Object lock = new Object();
-
-    // temporaire : un joueur doit avoir son deck
-    ArrayList<Carte> me1 ;
+    ArrayList<Carte> me1 ; // temporaire : un joueur doit avoir son deck
 
     public Serveur(Configuration config) { 
         razCompteurNbCoupDuTour();
-
         serveur = new SocketIOServer(config);
         System.out.println("serveur : préparation du listener");
         serveur.addConnectListener(new ConnectListener() {
@@ -51,6 +44,7 @@ public class Serveur {
         Plateau p1 = mo1.getGizah_a();
         me1 = mo1.getdeckA1();        
         mo1.melangerDeck_A1();
+        ArrayList<SocketIOClient> sockettemp = new ArrayList<SocketIOClient>();
 
         serveur.addEventListener("identification", Identification.class, new DataListener<Identification>() {
             @Override
@@ -61,7 +55,12 @@ public class Serveur {
                     System.out.println("serveur : remote address : "+socketIOClient.getRemoteAddress().toString());
                     listeJoueur.put(socketIOClient.getRemoteAddress().toString(),new Joueur(identification));
                     System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
-                    distribPlateau(socketIOClient,p1);
+                    sockettemp.add(socketIOClient);
+                    if(tousLesJoueurSontConnecte()){
+                        for(SocketIOClient s : sockettemp){ //ca fonctionne comme ca pour l'instant mais je changerai la HashMap plus tard
+                            distribPlateau(s, p1);
+                        }
+                    }
                 }
             }
         });
@@ -80,13 +79,11 @@ public class Serveur {
             public void onData(SocketIOClient socketIOClient, String carteChoisiJSON, AckRequest ackRequest) throws Exception {
                 String jsonstr = carteChoisiJSON;  
                 Gson gson = new Gson();
-                Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
-                
+                Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);        
                 Joueur leJoueur = listeJoueur.get(socketIOClient.getRemoteAddress().toString());
                 leJoueur.ajouterCarte(carteChoisi);
                 System.out.println("serveur : le "+leJoueur.getId().getNom()+" a maintenant "+leJoueur.getPtsVictoire()+" pts de victoires");
                 System.out.println("serveur : carteChoisi = "+carteChoisi);
-
                 if (tousLesJoueursOntJoue()) {
                     System.out.println("------------------------------------------------------------------------------------");
                     serveur.stop(); // ou on fait un tour de plus ou on change d'age ou on a fini
@@ -104,6 +101,13 @@ public class Serveur {
     private int nbCoupDuTour = 0;
     synchronized void razCompteurNbCoupDuTour() {
         nbCoupDuTour = 0;
+    }
+
+    synchronized boolean tousLesJoueurSontConnecte(){
+        if(listeJoueur.size()==NB_JOUEURS)
+            return true;
+        else
+            return false;
     }
 
     void faireUnTourDejeu() {
@@ -125,12 +129,13 @@ public class Serveur {
         System.exit(0);
         */
     }
-    private void distribPlateau(SocketIOClient socketIOClient, Plateau pl)
-    {
+
+    private void distribPlateau(SocketIOClient socketIOClient, Plateau pl) {
         Gson gson = new Gson();
     	String json = new Gson().toJson(pl);
         socketIOClient.sendEvent("distributionPlateau",json);
     }
+    
     private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
     	Gson gson = new Gson();
         String json = new Gson().toJson(deck);
