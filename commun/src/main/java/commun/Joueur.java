@@ -25,13 +25,23 @@ public class Joueur {
 		this.ptsVictoire = 0;
 	}
 	
+	public void ajouterPlateau(Plateau plateau){
+		this.plateau = plateau;
+	}
+
+	
 	public void ajouterCarte(Carte carte) {
 		cartes.add(carte);
 		carte.effet(this);
+		setPiece(this.getPiece()-carte.getPrix());
 	}
 
 	public ArrayList<Carte> getCartes(){
 		return cartes;
+	}
+
+	public void ajouterPtsVictoire(int nb){
+		setPtsVictoire(ptsVictoire+nb);
 	}
 
 	//Setter et getter
@@ -56,40 +66,6 @@ public class Joueur {
 		return id;
 	}
 
-	/*public Ressource[] getLesRessDuJ() //fait et retourne une liste de toutes les ressources que le joueur a
-	{
-		Ressource[] RessDuJ = new Ressource[45];
-		int j = 0;
-		Carte_ressource CarteResTMP;
-		Carte_produit CarteProdTMP;
-		
-		for(int i=0; i<this.cartes.size(); i++ )
-		{
-			
-			if(cartes.get(i) instanceof Carte_ressource)
-			{
-				System.out.println("carte r");
-				CarteResTMP = (Carte_ressource)cartes.get(i);
-				for( Ressource uneRess : CarteResTMP.getRessource())
-				{
-					RessDuJ[j]=uneRess;
-					j+=1;
-				}
-			}
-			else if(cartes.get(i) instanceof Carte_produit)
-			{
-				CarteProdTMP = (Carte_produit)cartes.get(i);
-				for( Ressource uneRess : CarteProdTMP.getRessource())
-				{
-					RessDuJ[j]=uneRess;
-					j+=1;
-				}
-			}
-		}
-		RessDuJ[j]=this.plateau.getRessourcePrincipale();
-		return RessDuJ;
-	}*/
-
 	public boolean AcheterCarte(Carte laCarte)
 	{
 		Ressource[] RessCoutTMP = laCarte.getCout();
@@ -99,7 +75,7 @@ public class Joueur {
 		{
 			if(this.getPiece()>=laCarte.getPrix())
 			{
-				this.setPiece(this.getPiece()-laCarte.getPrix());
+				//this.setPiece(this.getPiece()-laCarte.getPrix());  //Retirer le nb de pièces si il la joue 
 				return true;
 			}
 		}

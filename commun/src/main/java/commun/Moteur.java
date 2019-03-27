@@ -10,6 +10,7 @@ public class Moteur {
 	ArrayList<Carte> deck_age_2 = new ArrayList<Carte>();
 	ArrayList<Carte> deck_age_3 = new ArrayList<Carte>();
 
+	ArrayList<Plateau> deck_plateaux = new ArrayList<Plateau>();
 	Plateau gizah_a;
 
 	public Moteur(){
@@ -49,8 +50,13 @@ public class Moteur {
 
 		// Plateaux 
 
-		Plateau gizah_a = new Plateau("gizah_a", Ressource.PIERRE,deck_gizah_a);
+		gizah_a = new Plateau("gizah_a", Ressource.PIERRE,deck_gizah_a);
 		Plateau artemis_a = new Plateau("artemis_a", Ressource.PAPYRUS, deck_artemis_a);
+
+		// Deck Plateaux
+
+		deck_plateaux.add(gizah_a);
+		deck_plateaux.add(artemis_a);
 
 		// Cartes Age 1 
 		
@@ -89,6 +95,11 @@ public class Moteur {
 	public Plateau getGizah_a(){
 		return gizah_a;
 	}
+
+	public ArrayList<Plateau> get_deckPlateaux(){
+		return deck_plateaux;
+	}
+
 	public Moteur(ArrayList<Carte> cartes) {
 		super();
 		this.cartes = cartes;
@@ -132,5 +143,9 @@ public class Moteur {
 
 	public void melangerDeck_A3() {
 		Collections.shuffle(deck_age_3);
+	}
+
+	public void melangerPlateaux(){
+		Collections.shuffle(deck_plateaux);
 	}
 }

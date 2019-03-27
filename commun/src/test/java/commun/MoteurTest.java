@@ -1,7 +1,7 @@
 package commun;
 
-import static org.junit.Assert.assertTrue;
-
+//import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -15,37 +15,52 @@ import commun.Ressource;
 import commun.Identification;
 
 public class MoteurTest {
-		
-	Ressource[] r2 = {Ressource.BOIS,Ressource.BOIS,Ressource.BOIS};
-	Carte_victoire c2 = new Carte_victoire("victoire_5",r2,5);
-		
-	/*on les ajoute a sa liste de merveilles*/
-	ArrayList<Carte> me1 = new ArrayList<Carte>();
+	/*on crée le moteur*/
+	Moteur moteur = new Moteur();
+	Moteur M_temp = new Moteur();
+	ArrayList<Carte> DeckAge1_temp = moteur.getdeckA1();
+	
+	// Test instance des plateaux
+	ArrayList<Plateau> DeckPlateau = moteur.get_deckPlateaux();
+	Plateau gizahTest = DeckPlateau.get(0);
+	
+	Ressource[] pierre2 = {Ressource.PIERRE,Ressource.PIERRE};
+	Ressource[] pierre4 = {Ressource.PIERRE, Ressource.PIERRE, Ressource.PIERRE, Ressource.PIERRE};
+	Ressource[] bois3 = {Ressource.BOIS, Ressource.BOIS, Ressource.BOIS};
+	Carte_victoire e1_gizah_a = new Carte_victoire("etape 1", pierre2, 3);
+	Carte_victoire e2_gizah_a = new Carte_victoire("etape 2", bois3, 5);
+	Carte_victoire e3_gizah_a = new Carte_victoire("etape 3", pierre4, 7);
+	ArrayList<Carte> deck_gizah_a = new ArrayList<Carte>();
+	Plateau gizah_a = new Plateau("gizah_a", Ressource.PIERRE,deck_gizah_a);
 
-	/*on créer le plateau*/
-	Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
-	/*on créer une identification pour le besoin du test*/
+	// Test instance des cartes/decks par age
+	ArrayList<Carte> DeckAge1 = moteur.getdeckA1();
+	Carte preteur_sur_gageTest = DeckAge1.get(0);
+
+	Carte_victoire preteur_sur_gage = new Carte_victoire("preteur_sur_gage", 3);
+
+	/*on crée une identification pour le besoin du test*/
 	Identification i1 = new Identification("j1");
-	/*on créer le joueur*/
-	Joueur j1 = new Joueur(p1,i1);
+	/*on crée le joueur*/
+	Joueur j1 = new Joueur(gizahTest,i1);
 
-	/*on créer le moteur*/
-	Moteur mo1 = new Moteur(me1);
-
-	String s = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[]], ptsVictoire=5, cartes=[Carte [nom=victoire_5]]]";
-
+	String Sjoueur = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[Carte [nom=etape 1], Carte [nom=etape 2], Carte [nom=etape 3]]], ptsVictoire=3, cartes=[Carte [nom=preteur_sur_gage]]]";
+	
+	
 	@Test
 	public void test() throws Exception{
-
-		me1.add(c2);
-			
-		/*on mélange les cartes*/
-		mo1.melangerDeck_A1();
 		
-		/*on choisi une carte*/
-		j1.ajouterCarte(mo1.choisirCarte());
-		assertTrue(s.equals(j1.toString()));
+		deck_gizah_a.add(e1_gizah_a);
+		deck_gizah_a.add(e2_gizah_a);
+		deck_gizah_a.add(e3_gizah_a);
 
+		assertEquals(gizah_a.toString(),gizahTest.toString()); // test si on récupère correctement le plateaux gizah_a instancié dans Moteur
+		
+		assertEquals(preteur_sur_gage.toString(), preteur_sur_gageTest.toString()); // test si on récupère correctement la première carte instanciée dans le deck de l Age 1
+
+		j1.ajouterCarte(preteur_sur_gageTest);
+		assertTrue(Sjoueur.equals(j1.toString())); // test si le plateau et la carte ajoutés ont bien été ajouté dans la donnée du joueur
+		
 	}
 
 }

@@ -55,12 +55,8 @@ public class Serveur {
                     System.out.println("serveur : remote address : "+socketIOClient.getRemoteAddress().toString());
                     listeJoueur.put(socketIOClient.getRemoteAddress().toString(),new Joueur(identification));
                     System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
-                    sockettemp.add(socketIOClient);
-                    if(tousLesJoueurSontConnecte()){
-                        for(SocketIOClient s : sockettemp){ //ca fonctionne comme ca pour l'instant mais je changerai la HashMap plus tard
-                            distribPlateau(s, p1);
-                        }
-                    }
+                    distribPlateau(socketIOClient,p1);
+                    listeJoueur.get(socketIOClient.getRemoteAddress().toString()).ajouterPlateau(p1);  // ajoute le plateau dans leJoueur
                 }
             }
         });
@@ -84,6 +80,11 @@ public class Serveur {
                 leJoueur.ajouterCarte(carteChoisi);
                 System.out.println("serveur : le "+leJoueur.getId().getNom()+" a maintenant "+leJoueur.getPtsVictoire()+" pts de victoires");
                 System.out.println("serveur : carteChoisi = "+carteChoisi);
+    
+    //            System.out.println("-----------TEST--------");
+    //            System.out.println(leJoueur.toString());
+    //            System.out.println("---------------------");
+
                 if (tousLesJoueursOntJoue()) {
                     System.out.println("------------------------------------------------------------------------------------");
                     serveur.stop(); // ou on fait un tour de plus ou on change d'age ou on a fini
