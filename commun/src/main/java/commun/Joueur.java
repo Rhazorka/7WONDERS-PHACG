@@ -25,6 +25,11 @@ public class Joueur {
 		this.ptsVictoire = 0;
 	}
 	
+	public void ajouterPlateau(Plateau plateau){
+		this.plateau = plateau;
+	}
+
+	
 	public void ajouterCarte(Carte carte) {
 		cartes.add(carte);
 		carte.effet(this);
