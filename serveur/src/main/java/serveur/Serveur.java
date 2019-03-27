@@ -113,9 +113,11 @@ public class Serveur {
 
     void faireUnTourDejeu() {
         razCompteurNbCoupDuTour();
+        int k = 0;
         for( SocketIOClient s : serveur.getAllClients()) {
             Joueur j = listeJoueur.get(s.getRemoteAddress().toString());
-            poserUneQuestion(s, me1); // ou plutot j.getDeck();
+            poserUneQuestion(s, CouperDeck_A1(k)); // ou plutot j.getDeck();
+            k++;
         }
     }
 
@@ -140,6 +142,16 @@ public class Serveur {
     	Gson gson = new Gson();
         String json = new Gson().toJson(deck);
         socketIOClient.sendEvent("choixCarte",json);
+    }
+
+    public ArrayList<Carte> CouperDeck_A1(int joueur) {
+        int nbcartes = 3;
+        ArrayList<Carte> c = new ArrayList<Carte>();
+        
+        for(int i=0;i<nbcartes;i++){
+            c.add(me1.get(i+joueur*3));
+        }
+        return c;
     }
 
     public static final void main(String []args) {

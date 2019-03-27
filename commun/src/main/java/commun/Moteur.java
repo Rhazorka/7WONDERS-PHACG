@@ -31,6 +31,13 @@ public class Moteur {
 
 		Ressource[] papyrus2 = {Ressource.PAPYRUS, Ressource.PAPYRUS};
 
+		Ressource[] tissu1 = {Ressource.TISSU};
+
+		Ressource[] verre1 = {Ressource.VERRE};
+
+		Ressource[] papyrus1 = {Ressource.PAPYRUS};
+
+
 		// Cartes pour les plateaux (correspondantes aux étapes)
 		
 		Carte_victoire e1_gizah_a = new Carte_victoire("etape 1", pierre2, 3);
@@ -69,6 +76,10 @@ public class Moteur {
 		Carte_ressource cavite = new Carte_ressource("cavite", pierre1);
 		Carte_ressource bassin_argileux = new Carte_ressource("bassin argileux", argile1);
 		Carte_ressource filon = new Carte_ressource("filon", minerai1);
+
+		Carte_produit metier_a_tisser = new Carte_produit("metier a tisser",tissu1);
+		Carte_produit verrerie = new Carte_produit("verrerie",verre1);
+		Carte_produit presse = new Carte_produit("presse",papyrus1);
 		
 		deck_gizah_a.add(e1_gizah_a);
 		deck_gizah_a.add(e2_gizah_a);
@@ -86,6 +97,9 @@ public class Moteur {
 		deck_age_1.add(theatre);
 		deck_age_1.add(bassin_argileux);
 		deck_age_1.add(filon);	
+		deck_age_1.add(metier_a_tisser);
+		deck_age_1.add(verrerie);
+		deck_age_1.add(presse);
 	}
 
 	public ArrayList<Carte> getdeckA1(){
