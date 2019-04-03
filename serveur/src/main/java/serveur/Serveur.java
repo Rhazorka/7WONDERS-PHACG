@@ -20,6 +20,7 @@ import commun.Carte;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,13 @@ public class Serveur {
 	private SocketIOServer serveur;
     private Map <String,Joueur> listeJoueur = new HashMap<String,Joueur>();
     private final Object lock = new Object();
-    ArrayList<Carte> me1 ; // temporaire : un joueur doit avoir son deck
+    
+    ArrayList<Carte> deck1 ; // temporaire : un joueur doit avoir son deck
+
+    public ArrayList<Carte> melangerDeck(ArrayList<Carte> Deck_AgeX){
+        Collections.shuffle(Deck_AgeX);
+        return Deck_AgeX;
+    }
 
     public Serveur(Configuration config) { 
         razCompteurNbCoupDuTour();
@@ -42,8 +49,10 @@ public class Serveur {
 
         Moteur mo1 = new Moteur();
         Plateau p1 = mo1.getGizah_a();
-        me1 = mo1.getdeckA1();        
-        mo1.melangerDeck_A1();
+        deck1 = mo1.getdeckA1();        
+        deck1 = melangerDeck(deck1);
+        
+        //mo1.melangerDeck_A1();
         ArrayList<SocketIOClient> sockettemp = new ArrayList<SocketIOClient>();
 
         serveur.addEventListener("identification", Identification.class, new DataListener<Identification>() {
@@ -92,8 +101,11 @@ public class Serveur {
 
                 if (tousLesJoueursOntJoue()) {
                     System.out.println("------------------------------------------------------------------------------------");
+                    System.out.println("serveur : tout le monde a joué je ferme");
                     serveur.stop(); // ou on fait un tour de plus ou on change d'age ou on a fini
                     System.exit(0);
+                    System.out.println("Tout le monde a fermé");
+                    
                 }
             } 
         });
@@ -155,7 +167,7 @@ public class Serveur {
         ArrayList<Carte> c = new ArrayList<Carte>();
         
         for(int i=0;i<nbcartes;i++){
-            c.add(me1.get(i+joueur*3));
+            c.add(deck1.get(i+joueur*3));
         }
         return c;
     }

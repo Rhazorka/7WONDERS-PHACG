@@ -9,8 +9,8 @@ import commun.Joueur;
 
 public class Carte_ressourceTest {
 
-	ArrayList<Carte> me1 = new ArrayList<Carte>();
-	Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
+	ArrayList<Carte> deck1 = new ArrayList<Carte>();
+	Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,deck1);
 	Identification i1 = new Identification("j1");
 	Joueur joueur = new Joueur(p1,i1);
 	

@@ -13,8 +13,8 @@ import commun.Ressource;
 import commun.Identification;
 
 public class JoueurTest {
-	ArrayList<Carte> me1 = new ArrayList<Carte>();
-	Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,me1);
+	ArrayList<Carte> deck1 = new ArrayList<Carte>();
+	Plateau p1 = new Plateau("gizah_a",Ressource.PIERRE,deck1);
 	Ressource[] r3 = {Ressource.PIERRE,Ressource.PIERRE,Ressource.PIERRE,Ressource.PIERRE};
 	Carte_victoire c3 = new Carte_victoire("victoire_7",r3,4);
 
