@@ -192,49 +192,5 @@ public class Moteur {
 		super();
 		this.cartes = cartes;
 	}	
-	
-	public Carte choisirCarte() {
-		Carte ret;
-		System.out.println("\nLe bot choisi le numéro de la carte qu'il va jouer : ");
-		for (Carte c : cartes) {
-			 System.out.println(cartes.indexOf(c)+" : "+c.toString());
-		}
-		//Scanner sc = new Scanner(System.in);
-		
-		int choix_bot = (int) (Math.random() * cartes.size());
 
-		while(true) {
-			//String str = sc.nextLine();
-		
-			try {
-			//	int selection = Integer.parseInt(str);
-			//	ret = cartes.get(selection);
-			//	cartes.remove(selection);
-				ret = cartes.get(choix_bot);
-				cartes.remove(choix_bot);
-				return ret;
-			}catch(NumberFormatException e) {
-				System.out.println("Il faut que la selection soit un chiffre");
-			}catch(IndexOutOfBoundsException e) {
-				System.out.println("Il faut que le chiffre soit compris entre 0 et "+(cartes.size()-1));
-			}
-		}
-	}
-/*
-	public void melangerDeck_A1() {
-		Collections.shuffle(deck_age_1);
-	}
-
-	public void melangerDeck_A2() {
-		Collections.shuffle(deck_age_2);
-	}
-
-	public void melangerDeck_A3() {
-		Collections.shuffle(deck_age_3);
-	}
-
-	public void melangerPlateaux(){
-		Collections.shuffle(deck_plateaux);
-	}
-*/
 }

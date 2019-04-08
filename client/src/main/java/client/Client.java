@@ -24,6 +24,26 @@ public class Client {
 //    private final Object attenteDeconnexion = new Object();
     private final Object lock = new Object();
 
+    public Carte choisirCarte(ArrayList<Carte> cartes) {
+		Carte ret;
+		System.out.println("Le bot choisi le numéro de la carte qu'il va jouer : ");
+		for (Carte c : cartes) {
+			 System.out.println(cartes.indexOf(c)+" : "+c.toString());
+		}
+		int choix_bot = (int) (Math.random() * cartes.size());
+		while(true) {
+			try {
+				ret = cartes.get(choix_bot);
+				cartes.remove(choix_bot);
+				return ret;
+			}catch(NumberFormatException e) {
+				System.out.println("Il faut que la selection soit un chiffre");
+			}catch(IndexOutOfBoundsException e) {
+				System.out.println("Il faut que le chiffre soit compris entre 0 et "+(cartes.size()-1));
+			}
+		}
+	}
+
     public Client(String urlServeur, String nom) {
         try {
             moi.setNom(nom);
@@ -53,8 +73,7 @@ public class Client {
                         Gson gson = new Gson();
                         Carte_victoire[] deck = gson.fromJson(jsonstr, Carte_victoire[].class);
                         ArrayList<Carte> deckAL = new ArrayList<Carte>(Arrays.asList(deck));
-                        Moteur motemp = new Moteur(deckAL);
-                        Carte carteChoisi = motemp.choisirCarte();
+                        Carte carteChoisi = choisirCarte(deckAL);
                         System.out.println("client : carteChoisi = " + carteChoisi.toString());
                         String json = new Gson().toJson(carteChoisi);
                         connexion.emit("choixCarte", json);
