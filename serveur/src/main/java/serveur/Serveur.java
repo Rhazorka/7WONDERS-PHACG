@@ -13,6 +13,7 @@ import commun.Identification;
 import commun.Moteur;
 import commun.Plateau;
 import commun.Ressource;
+import io.netty.util.internal.SocketUtils;
 import commun.Joueur;
 import commun.Carte_victoire;
 import commun.Carte;
@@ -40,7 +41,6 @@ public class Serveur {
     public Serveur(Configuration config) { 
         razCompteurNbCoupDuTour();
         serveur = new SocketIOServer(config);
-        System.out.println("serveur : préparation du listener");
         serveur.addConnectListener(new ConnectListener() {
             public void onConnect(SocketIOClient socketIOClient) {
                 System.out.println("serveur : connexion de "+socketIOClient.getRemoteAddress().toString());
@@ -61,13 +61,12 @@ public class Serveur {
                 synchronized(lock){
                     identification.setNom("Joueur "+listeJoueur.size());
                     System.out.println("serveur : le client est "+identification.getNom());
-                    System.out.println("serveur : remote address : "+socketIOClient.getRemoteAddress().toString());
                     listeJoueur.put(socketIOClient.getRemoteAddress().toString(),new Joueur(identification));
-                    System.out.println("serveur : il y a maintenant "+listeJoueur.size()+" joueurs");
                     sockettemp.add(socketIOClient);
                     if(tousLesJoueurSontConnecte()){
+                        System.out.println("\n----------------------Début partie----------------------");
                         for(SocketIOClient s : sockettemp){ //ca fonctionne comme ca pour l'instant mais je changerai la HashMap plus tard
-                            distribPlateau(s, p1);
+                            distributionPlateau(s, p1);
                         }
                     }
                     listeJoueur.get(socketIOClient.getRemoteAddress().toString()).ajouterPlateau(p1);  // ajoute le plateau dans leJoueur
@@ -92,20 +91,16 @@ public class Serveur {
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);        
                 Joueur leJoueur = listeJoueur.get(socketIOClient.getRemoteAddress().toString());
                 leJoueur.ajouterCarte(carteChoisi);
-                System.out.println("serveur : le "+leJoueur.getId().getNom()+" a maintenant "+leJoueur.getPtsVictoire()+" pts de victoires");
-                System.out.println("serveur : carteChoisi = "+carteChoisi);
+                //System.out.println("serveur : le "+leJoueur.getId().getNom()+" a maintenant "+leJoueur.getPtsVictoire()+" pts de victoires");
     
     //            System.out.println("-----------TEST--------");
     //            System.out.println(leJoueur.toString());
     //            System.out.println("---------------------");
 
                 if (tousLesJoueursOntJoue()) {
-                    System.out.println("------------------------------------------------------------------------------------");
-                    System.out.println("serveur : tout le monde a joué je ferme");
+                    System.out.println("---------------------Fin partie---------------------");
                     serveur.stop(); // ou on fait un tour de plus ou on change d'age ou on a fini
                     System.exit(0);
-                    System.out.println("Tout le monde a fermé");
-                    
                 }
             } 
         });
@@ -133,14 +128,13 @@ public class Serveur {
         int k = 0;
         for( SocketIOClient s : serveur.getAllClients()) {
             Joueur j = listeJoueur.get(s.getRemoteAddress().toString());
-            poserUneQuestion(s, CouperDeck_A1(k)); // ou plutot j.getDeck();
+            choixCarte(s, CouperDeck_A1(k)); // ou plutot j.getDeck();
             k++;
         }
     }
 
     public void demarrer() {
         serveur.start();
-        System.out.println("serveur : en attente de connexion");
         /*
         System.out.println("serveur : une connexion est arrivée, on arrête");
         serveur.stop();
@@ -150,13 +144,13 @@ public class Serveur {
         */
     }
 
-    private void distribPlateau(SocketIOClient socketIOClient, Plateau pl) {
+    private void distributionPlateau(SocketIOClient socketIOClient, Plateau pl) {
         Gson gson = new Gson();
     	String json = new Gson().toJson(pl);
         socketIOClient.sendEvent("distributionPlateau",json);
     }
     
-    private void poserUneQuestion(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
+    private void choixCarte(SocketIOClient socketIOClient, ArrayList<Carte> deck) {
     	Gson gson = new Gson();
         String json = new Gson().toJson(deck);
         socketIOClient.sendEvent("choixCarte",json);
@@ -190,6 +184,5 @@ public class Serveur {
 
         Serveur serveur = new Serveur(config);
         serveur.demarrer();
-        System.out.println("serveur : fin du main");
     }
 }

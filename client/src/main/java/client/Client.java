@@ -28,12 +28,10 @@ public class Client {
         try {
             moi.setNom(nom);
             connexion = IO.socket(urlServeur);
-            System.out.println("client : on s'abonne à la connection / déconnection ");
 
             connexion.on("connect", new Emitter.Listener() {
                 @Override
                 public void call(Object... objects) {
-                    System.out.println("client : on est connecté et on s'identifie ");
                     JSONObject id = new JSONObject(moi);
                     connexion.emit("identification", id); // transmet l'objet moi au serveur
                 }
@@ -41,7 +39,6 @@ public class Client {
             connexion.on("disconnect", new Emitter.Listener() {
                 @Override
                 public void call(Object... objects) {
-                    System.out.println("client : on est déconnecté");
                     connexion.disconnect();
                     connexion.close();
                     System.exit(0);
@@ -52,11 +49,9 @@ public class Client {
                 public void call(Object... objects) {
                     synchronized (lock) {
                         ArrayList<Carte> cartes = new ArrayList<Carte>();
-                        System.out.println("client : recu Deck = " + (String) objects[0]);
                         String jsonstr = (String) objects[0];
                         Gson gson = new Gson();
                         Carte_victoire[] deck = gson.fromJson(jsonstr, Carte_victoire[].class);
-                        // System.out.println("client : converti = :"+deck.toString());
                         ArrayList<Carte> deckAL = new ArrayList<Carte>(Arrays.asList(deck));
                         Moteur motemp = new Moteur(deckAL);
                         Carte carteChoisi = motemp.choisirCarte();
@@ -74,7 +69,7 @@ public class Client {
                         //System.out.println("client : on a reçu une requête avec "+objects.length+" paramètre(s) ");
                         Boolean rep =false;
                         if(objects.length>0){
-                            System.out.println("client : recu Plateau = "+(String)objects[0]);
+                            //System.out.println("client : recu Plateau = "+(String)objects[0]);
                             rep=true;
                         }
                         String json = new Gson().toJson(rep);
@@ -91,8 +86,6 @@ public class Client {
 
     public void seConnecter() {
         connexion.connect();
-        System.out.println("client : en attente de déconnexion");
-
         /*
         synchronized (attenteDeconnexion) {
             try {
@@ -112,6 +105,5 @@ public class Client {
         }
         Client client = new Client("http://127.0.0.1:10101", "toto");
         client.seConnecter();
-        System.out.println("client : fin du main");
     }
 }

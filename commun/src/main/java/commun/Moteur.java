@@ -195,7 +195,7 @@ public class Moteur {
 	
 	public Carte choisirCarte() {
 		Carte ret;
-		System.out.println("Le bot choisi le numéro de la carte qu'il va jouer : ");
+		System.out.println("\nLe bot choisi le numéro de la carte qu'il va jouer : ");
 		for (Carte c : cartes) {
 			 System.out.println(cartes.indexOf(c)+" : "+c.toString());
 		}
