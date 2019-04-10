@@ -43,6 +43,10 @@ public class Serveur {
         Collections.shuffle(Deck_AgeX);
         return Deck_AgeX;
     }
+    
+    public String ServeurTest(){
+        return "serveur : réplique reçu";
+    }
 
     public Serveur(Configuration config) {
         razCompteurNbCoupDuTour();
@@ -81,6 +85,17 @@ public class Serveur {
                     }
                     listeJoueur.get(socketIOClient).ajouterPlateau(p1); // ajoute le plateau dans leJoueur
                 }
+            }
+        });
+
+        serveur.addEventListener("test", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest) throws Exception {
+                    String Jreponse = reponseJSON;
+                    Gson gson = new Gson();
+                    System.out.println(Jreponse);
+                    Jreponse = ServeurTest();
+                    socketIOClient.sendEvent("retour_test", gson.toJson(Jreponse)); // retransforme Jreponse en Json
             }
         });
 
@@ -223,6 +238,11 @@ public class Serveur {
         return mainAge;
     }
 
+    private void test(SocketIOClient socketIOClient){
+        //Gson gson = new Gson();
+        //String json = new Gson().toJson(str);
+        socketIOClient.sendEvent("test");
+    }
     public static final void main(String []args) {
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8"));

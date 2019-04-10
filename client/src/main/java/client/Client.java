@@ -20,6 +20,17 @@ public class Client {
     private Identification moi = new Identification();
     private Socket connexion;
 
+    public String phrase_base;
+    public String phrase_retour = "hello world";
+
+    public void setphrase_base(String newstr){
+        this.phrase_base = newstr;
+    }
+
+    public String ClientTest(){
+        return "client : réplique";
+    }
+
     public Carte choisirCarte(ArrayList<Carte> cartes) {
 		Carte ret;
 		for (Carte c : cartes) {
@@ -51,6 +62,14 @@ public class Client {
                 }
             });
 
+            connexion.on("retour_test", new Emitter.Listener(){
+                @Override
+                public void call(Object... objects){
+                    phrase_retour = (String) objects[0];
+                    System.out.println(phrase_retour);
+                }
+            });
+
             connexion.on("disconnect", new Emitter.Listener() {
                 @Override
                 public void call(Object... objects) {
@@ -79,6 +98,11 @@ public class Client {
                 @Override
                 public void call(Object... objects) {
                     Boolean rep =false;
+
+                    phrase_base = ClientTest();
+                    String Strjson = new Gson().toJson(phrase_base);
+                    connexion.emit("test",Strjson);
+
                     if(objects.length>0){
                         rep=true;
                     }
@@ -92,7 +116,9 @@ public class Client {
     }
 
     public void seConnecter() {
+         //   System.out.println("-------- CLIENT ------- "+this.phrase_base+" ------");
         connexion.connect();
+      //  System.out.println("-------- CLIENT ------- "+this.phrase_base+" ------");
     }
 
     public static final void main(String []args) {
