@@ -9,7 +9,6 @@ public class Identification {
         this.nom = nom;
     }
 
-
     public String getNom() {
         return nom;
     }
