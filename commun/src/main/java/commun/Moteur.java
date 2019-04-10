@@ -1,10 +1,6 @@
 package commun;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-
-import javax.print.attribute.ResolutionSyntax; 
 
 public class Moteur {
 	ArrayList<Carte> cartes = new ArrayList<Carte>();
@@ -179,6 +175,15 @@ public class Moteur {
 	public ArrayList<Carte> getdeckA1(){
 		return deck_age_1;
 	} 
+
+	public ArrayList<Carte> getdeckA2(){
+		return deck_age_2;
+	} 
+
+	public ArrayList<Carte> getdeckA3(){
+		return deck_age_3;
+	} 
+
 
 	public Plateau getGizah_a(){
 		return gizah_a;
