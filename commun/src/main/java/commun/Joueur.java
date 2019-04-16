@@ -8,6 +8,9 @@ public class Joueur {
 	//Points / Pieces
 	private int ptsVictoire;
 	private int piece;
+	//Guerre
+	private int ptsMalusMilitaire;
+	private int ptsPuissanceMilitaire;
 	//Sa liste de cartes
 	private ArrayList<Carte> cartes = new ArrayList<>();
 
@@ -16,6 +19,8 @@ public class Joueur {
 		this.id = id;
 		this.piece = 3; //Le joueur a trois pièces de base
 		this.ptsVictoire = 0;
+		this.ptsMalusMilitaire = 0;
+		this.ptsPuissanceMilitaire = 0;
 	}
 
 	public Joueur(Identification id){
@@ -23,6 +28,8 @@ public class Joueur {
 		this.id = id;
 		this.piece = 3; //Le joueur a trois pièces de base
 		this.ptsVictoire = 0;
+		this.ptsMalusMilitaire = 0;
+		this.ptsPuissanceMilitaire = 0;
 	}
 	
 	public void ajouterPlateau(Plateau plateau){
@@ -65,6 +72,31 @@ public class Joueur {
 	public Identification getId(){
 		return id;
 	}
+
+	public void setMalusMilitaire(int nb){
+		this.ptsMalusMilitaire = nb;
+	}
+
+	public int getMalusMilitaire(){
+		return ptsMalusMilitaire;
+	}
+
+	public void ajouterMalusMilitaire(int nb){
+		this.ptsMalusMilitaire += nb;
+	}
+
+	public void setPuissanceMilitaire(int nb){
+		this.ptsPuissanceMilitaire = nb;
+	}
+
+	public int getPuissanceMilitaire(){
+		return ptsPuissanceMilitaire;
+	}
+
+	public void ajouterPuissanceMilitaire(int nb){
+		this.ptsPuissanceMilitaire += nb;
+	}
+
 
 	public boolean AcheterCarte(Carte laCarte)
 	{

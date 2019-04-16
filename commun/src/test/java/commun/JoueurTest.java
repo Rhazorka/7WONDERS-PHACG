@@ -31,6 +31,8 @@ public class JoueurTest {
 	Carte_scientifique carte_testCompas = new Carte_scientifique("Compas", bois, Famille.COMPAS);
 	Carte_scientifique carte_testRosette = new Carte_scientifique("Rosette", bois, Famille.ROSETTE);
 
+	Carte_militaire carte_mili2 = new Carte_militaire("Mili 2", r1, 2);
+
 	Identification i1 = new Identification("j1");
 	Joueur j1 = new Joueur(p1,i1);
 
@@ -63,13 +65,24 @@ public class JoueurTest {
 		//TESTS SCIENTIFIQUES
 		j1.ajouterCarte(carte_testRoue); 
 		assertEquals(1, j1.calculScientifique()); //J1 à une roue donc 1*1+0*0+0*0=1
+
 		j1.ajouterCarte(carte_testRoue); 
 		assertEquals(4, j1.calculScientifique()); //J1 à une roue donc 2*2+0*0+0*0=4
+
 		j1.ajouterCarte(carte_testCompas);
 		assertEquals(5, j1.calculScientifique()); //J1 à une roue donc 2*2+1*1+0*0=5
+
 		j1.ajouterCarte(carte_testCompas);
 		assertEquals(8, j1.calculScientifique()); //J1 à une roue donc 2*2+2*2+0*0=8
+		
 		j1.ajouterCarte(carte_testRosette);
 		assertEquals(9, j1.calculScientifique()); //J1 à une roue donc 2*2+2*2+1*1=9
+
+		//MILITAIRE
+		j1.ajouterCarte(carte_mili2);
+		assertEquals(2, j1.getPuissanceMilitaire()); //J1 doit avoir 2 de puissance militaire
+
+		j1.ajouterCarte(carte_mili2);
+		assertEquals(4, j1.getPuissanceMilitaire()); //J1 doit avoir 4 de puissance militaire
 	}
 }
