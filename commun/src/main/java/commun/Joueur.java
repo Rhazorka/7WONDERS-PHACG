@@ -188,6 +188,30 @@ public class Joueur {
 		return false;
 	}
 
+	public int calculScientifique(){
+		int compteurRoue = 0;
+		int compteurCompas = 0;
+		int compteurRosette = 0;
+		for(int i=0; i<this.cartes.size();i++)//parcour les cartes du joueur
+		{
+			if(this.cartes.get(i) instanceof Carte_scientifique)//Carte scientifique?
+			{
+				switch(((Carte_scientifique)this.cartes.get(i)).getFamille()) { //Switch qui augmente les compteurs de la famille correspondante
+					case ROUE:
+					  compteurRoue++;
+					  break;
+					case COMPAS:
+					  compteurCompas++;
+					  break;
+					case ROSETTE:
+					  compteurRosette++;
+					  break;
+				  }
+			}
+		}
+		return (compteurRoue*compteurRoue) + (compteurCompas*compteurCompas) + (compteurRosette*compteurRosette);
+	} 
+
 	@Override
 	public String toString() {
 		return "Joueur [id=" + id.getNom() + ", plateau=" + plateau + ", ptsVictoire=" + ptsVictoire + ", cartes=" + cartes
