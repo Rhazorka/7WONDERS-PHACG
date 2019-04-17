@@ -29,7 +29,7 @@ public class Serveur {
     public final static int NB_JOUEURS = 3;
     private SocketIOServer serveur;
     private Map<SocketIOClient, Joueur> listeJoueur = new HashMap<SocketIOClient, Joueur>();
-    private Map<Joueur,ArrayList<Carte>> listeMainJoueurs = new HashMap<Joueur,ArrayList<Carte>>();
+    private Map<SocketIOClient,ArrayList<Carte>> listeMainJoueurs = new HashMap<SocketIOClient,ArrayList<Carte>>();
     private final Object lock = new Object();
     private int nbCoupDuTour = 0;
     private int age = 1;
@@ -118,26 +118,13 @@ public class Serveur {
                 String jsonstr = carteChoisiJSON;
                 Gson gson = new Gson();
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
-
-                /*for (int i = 0; i < listeDecks.size(); i++) {
-                    for (int j = 0; j < listeDecks.get(i).size(); j++) {
-                        //System.out.println("carte du deck : "+listeDecks.get(i).get(j).getNom());
-                        //System.out.println("carte choisi  : "+carteChoisi.getNom());
-                        if(carteChoisi.getNom().equals(listeDecks.get(i).get(j).getNom())){
-                            //System.out.println("remove de :"+listeDecks.get(i).get(j).getNom());
-                            listeJoueur.get(socketIOClient).ajouterCarte(listeDecks.get(i).get(j));
-                            listeDecks.get(i).remove(j);
-                        }
-                    }
-                }*/
-
-                /*cette méthode ne fonctionne que si les decks ne sont pas transmis d'une main à l'autre*/
-                //System.out.println("--carteChoisi-- : "+carteChoisi.getNom());
-                for(int x=0;x<listeDecks.get(Integer.parseInt(listeJoueur.get(socketIOClient).getId().getNom())).size();x++){
-                    //System.out.println("carteDuDeck : "+listeDecks.get(listeJoueur.get(socketIOClient).getId().getNom()).get(x).getNom());
-                    if(carteChoisi.getNom().equals(listeDecks.get(Integer.parseInt(listeJoueur.get(socketIOClient).getId().getNom())).get(x).getNom())){
-                        listeJoueur.get(socketIOClient).ajouterCarte(listeDecks.get(Integer.parseInt(listeJoueur.get(socketIOClient).getId().getNom())).get(x));
-                        listeDecks.get(Integer.parseInt(listeJoueur.get(socketIOClient).getId().getNom())).remove(x);
+                //System.out.println("taille du deck : "+listeMainJoueurs.get(socketIOClient).size());
+                //System.out.println("carteChoisi    : "+carteChoisi.getNom());
+                for(int i=0;i<listeMainJoueurs.get(socketIOClient).size();i++){
+                    //System.out.println("carteDuDeck    : "+listeMainJoueurs.get(socketIOClient).get(i).getNom());
+                    if(carteChoisi.getNom().equals(listeMainJoueurs.get(socketIOClient).get(i).getNom())){
+                        //System.out.println("bah on suppr : "+listeMainJoueurs.get(socketIOClient).get(i).getNom());
+                        listeMainJoueurs.get(socketIOClient).remove(i);
                     }
                 }
             }
@@ -180,6 +167,7 @@ public class Serveur {
                 i++;
             }
         }
+        //System.out.println("listeMainJoueurs : "+listeMainJoueurs.toString());
         System.out.println("\n\t      ~~~~~~~~~~~Fin age~~~~~~~~~~~");
         System.out.println("\n-----------------------Fin partie-----------------------\n");
     }
@@ -188,19 +176,26 @@ public class Serveur {
         for(int i=NB_JOUEURS;i>0;i--){
             listeDecks.add(CouperDeck(i,age));
         }
+        Set<SocketIOClient> cles = listeJoueur.keySet();
+        Iterator<SocketIOClient> it = cles.iterator();
+        int i=0;
+        while (it.hasNext()){
+            SocketIOClient cle = it.next();
+            listeMainJoueurs.put(cle,listeDecks.get(i));
+            i++;
+        }
+        //System.out.println("listeMainJoueurs : "+listeMainJoueurs.toString());
     }
 
     synchronized void faireUnTourDejeu() {
         razCompteurNbCoupDuTour();
         System.out.println("\n\t\t   ====Debut tour====\n");
-        Set cles = listeJoueur.keySet();
-        Iterator it = cles.iterator();
+        Set<SocketIOClient> cles = listeMainJoueurs.keySet();
+        Iterator<SocketIOClient> it = cles.iterator();
         int i=0;
         while (it.hasNext()){
-            Object cle = it.next();
-            choixCarte((SocketIOClient)cle, listeDecks.get(i));
-            //System.out.println("Main : "+i+" attribué à Joueur "+listeJoueur.get((SocketIOClient)cle).getId().getNom());
-            //i++; commenter car sinon des decks différents sont attribués aux joueurs mais la suppression des cartes de ces mains ne fonctionne pas parfaitement pour le moment
+            SocketIOClient cle = it.next();
+            choixCarte(cle, listeMainJoueurs.get(cle));
         }
         try {
             Thread.sleep(1000);
