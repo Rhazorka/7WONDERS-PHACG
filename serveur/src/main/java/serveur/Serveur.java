@@ -189,6 +189,7 @@ public class Serveur {
 
     synchronized void faireUnTourDejeu() {
         razCompteurNbCoupDuTour();
+        voisin(listeJoueur);
         System.out.println("\n\t\t   ====Debut tour====\n");
         Set<SocketIOClient> cles = listeMainJoueurs.keySet();
         Iterator<SocketIOClient> it = cles.iterator();
@@ -232,6 +233,28 @@ public class Serveur {
             mainAge.add(deckAge.get(i+joueur*NB_JOUEURS));
         return mainAge;
     }
+
+    public static void voisin(Map mp) {
+        ArrayList<Integer> in = new ArrayList<Integer>();
+        int i=0;
+        Iterator it = mp.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            i+=1;
+            in.add(i);
+        }
+
+        int k = in.size()-1;
+        for(int j=0;j<in.size();j++){
+            System.out.println("Joueur :"+j);
+            if((j-1)%3==-1){
+                System.out.println("Voisin gauche :"+k);
+            }else{
+                System.out.println("Voisin gauche :"+(j-1)%3);
+            }
+            System.out.println("Voisin droite :"+(j+1)%3);
+        }
+    } 
 
     private void test(SocketIOClient socketIOClient){
         //Gson gson = new Gson();
