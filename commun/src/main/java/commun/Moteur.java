@@ -12,7 +12,7 @@ public class Moteur {
 	Plateau gizah_a;
 
 	public Moteur(){
-		// Ressources
+		// Ressources principales
 		
 		Ressource[] pierre1 = {Ressource.PIERRE};
 		Ressource[] pierre2 = {Ressource.PIERRE,Ressource.PIERRE};
@@ -37,6 +37,10 @@ public class Moteur {
 
 		Ressource[] papyrus1 = {Ressource.PAPYRUS};
 
+		// Ressources complexes pour...
+
+		//...carte ressource
+
 		Ressource[] Rfriche = {Ressource.BOIS, Ressource.ARGILE};
 		Ressource[] Rexcavation = {Ressource.PIERRE, Ressource.ARGILE};
 		Ressource[] Rfosse_argileuse = {Ressource.ARGILE, Ressource.MINERAI};
@@ -44,15 +48,38 @@ public class Moteur {
 		Ressource[] Rgisement = {Ressource.BOIS, Ressource.MINERAI};
 		Ressource[] Rmine = {Ressource.MINERAI, Ressource.PIERRE};
 
+		//...carte victoire
+
 		Ressource[] Rtemple = {Ressource.BOIS, Ressource.ARGILE, Ressource.VERRE};
 		Ressource[] Rstatue = {Ressource.MINERAI, Ressource.MINERAI, Ressource.BOIS};
 		Ressource[] Rtribunal = {Ressource.ARGILE, Ressource.ARGILE, Ressource.TISSU};
-
 		Ressource[] Rpantheon = {Ressource.ARGILE, Ressource.ARGILE, Ressource.MINERAI, Ressource.PAPYRUS, Ressource.TISSU, Ressource.VERRE};
 		Ressource[] Rjardins = {Ressource.ARGILE, Ressource.ARGILE, Ressource.BOIS};
 		Ressource[] Rhotel = {Ressource.PIERRE, Ressource.PIERRE, Ressource.MINERAI, Ressource.VERRE};
 		Ressource[] Rpalace = {Ressource.ARGILE, Ressource.BOIS, Ressource.MINERAI, Ressource.PIERRE, Ressource.VERRE, Ressource.PAPYRUS, Ressource.TISSU};
 		Ressource[] Rsenat = {Ressource.BOIS, Ressource.BOIS, Ressource.MINERAI, Ressource.PIERRE};
+
+		//...carte scientifique
+
+		Ressource[] Rdispensaire = {Ressource.MINERAI, Ressource.MINERAI, Ressource.VERRE};
+		Ressource[] Rlaboratoire = {Ressource.ARGILE, Ressource.ARGILE, Ressource.PAPYRUS};
+		Ressource[] Rbibliotheque = {Ressource.PIERRE, Ressource.PIERRE, Ressource.TISSU};
+		Ressource[] Recole = {Ressource.BOIS, Ressource.PAPYRUS};
+		Ressource[] Rloge = {Ressource.ARGILE, Ressource.ARGILE, Ressource.TISSU, Ressource.PAPYRUS};
+		Ressource[] Robservatoire = {Ressource.MINERAI, Ressource.MINERAI, Ressource.VERRE, Ressource.TISSU};
+		Ressource[] Runiversite = {Ressource.BOIS, Ressource.BOIS, Ressource.PAPYRUS, Ressource.VERRE};
+		Ressource[] Racademie = {Ressource.PIERRE, Ressource.PIERRE, Ressource.PIERRE, Ressource.VERRE};
+		Ressource[] Retude = {Ressource.BOIS, Ressource.PAPYRUS, Ressource.TISSU};
+
+		//...carte militaire
+
+		Ressource[] Rplace_darmes = {Ressource.MINERAI, Ressource.MINERAI, Ressource.BOIS};
+		Ressource[] Recuries = {Ressource.MINERAI, Ressource.ARGILE, Ressource.BOIS};
+		Ressource[] Rchamps_de_tir = {Ressource.BOIS, Ressource.BOIS, Ressource.MINERAI};
+		Ressource[] Rfortifications = {Ressource.MINERAI, Ressource.MINERAI, Ressource.MINERAI, Ressource.PIERRE};
+		Ressource[] Rcirque = {Ressource.PIERRE, Ressource.PIERRE, Ressource.PIERRE, Ressource.MINERAI};
+		Ressource[] Rarsenal = {Ressource.MINERAI, Ressource.BOIS, Ressource.BOIS, Ressource.TISSU};
+		Ressource[] Ratelier_de_siege = {Ressource.BOIS, Ressource.ARGILE, Ressource.ARGILE, Ressource.ARGILE};
 
 		// Cartes pour les plateaux (correspondantes aux étapes)
 		
@@ -103,6 +130,14 @@ public class Moteur {
 		Carte_produit verrerie = new Carte_produit("verrerie",verre1);
 		Carte_produit presse = new Carte_produit("presse",papyrus1);
 
+		Carte_scientifique officine = new Carte_scientifique("officine",tissu1,Famille.COMPAS);
+		Carte_scientifique atelier = new Carte_scientifique("atelier",verre1,Famille.ROUE);
+		Carte_scientifique scriptorium = new Carte_scientifique("scriptorium",papyrus1,Famille.ROSETTE);
+
+		Carte_militaire palissade = new Carte_militaire("palissade", bois1, 1);
+		Carte_militaire caserne = new Carte_militaire("caserne", minerai1, 1);
+		Carte_militaire tour_de_garde = new Carte_militaire("tour de garde", argile1, 1);
+
 		// Cartes Age 2
 
 		Carte_ressource scierie = new Carte_ressource("scierie", 1, bois2);
@@ -119,6 +154,16 @@ public class Moteur {
 		Carte_victoire statue = new Carte_victoire("statue", Rstatue, 4);
 		Carte_victoire tribunal = new Carte_victoire("tribunal", Rtribunal, 4);
 
+		Carte_scientifique dispensaire = new Carte_scientifique("dispensaire",Rdispensaire,Famille.COMPAS);
+		Carte_scientifique laboratoire = new Carte_scientifique("laboratoire",Rlaboratoire,Famille.ROUE);
+		Carte_scientifique bibliotheque = new Carte_scientifique("bibliotheque",Rbibliotheque,Famille.ROSETTE);
+		Carte_scientifique ecole = new Carte_scientifique("ecole",Recole,Famille.ROSETTE);
+
+		Carte_militaire muraille = new Carte_militaire("muraille", pierre3, 2);
+		Carte_militaire place_darmes = new Carte_militaire("place d'armes", Rplace_darmes, 2);
+		Carte_militaire ecuries = new Carte_militaire("ecuries", Recuries, 2);
+		Carte_militaire champs_de_tir = new Carte_militaire("champs de tir", Rchamps_de_tir, 2);
+
 		// Carte Age 3
 
 		Carte_victoire pantheon = new Carte_victoire("pantheon", Rpantheon, 7);
@@ -126,6 +171,17 @@ public class Moteur {
 		Carte_victoire hotel = new Carte_victoire("hotel de ville", Rhotel, 6);
 		Carte_victoire palace = new Carte_victoire("palace", Rpalace, 8);
 		Carte_victoire senat = new Carte_victoire("senat", Rsenat, 6); 
+
+		Carte_scientifique loge = new Carte_scientifique("loge",Rloge,Famille.COMPAS);
+		Carte_scientifique observatoire = new Carte_scientifique("observatoire",Robservatoire,Famille.ROUE);
+		Carte_scientifique universite = new Carte_scientifique("universite",Runiversite,Famille.ROSETTE);
+		Carte_scientifique academie = new Carte_scientifique("academie",Racademie,Famille.COMPAS);
+		Carte_scientifique etude = new Carte_scientifique("etude",Retude,Famille.COMPAS);
+
+		Carte_militaire fortifications = new Carte_militaire("fortifications", Rfortifications, 3);
+		Carte_militaire cirque = new Carte_militaire("cirque", Rcirque, 3);
+		Carte_militaire arsenal = new Carte_militaire("arsenal", Rarsenal, 3);
+		Carte_militaire atelier_de_siege = new Carte_militaire("atelier de siege", Ratelier_de_siege, 3);
 
 		deck_gizah_a.add(e1_gizah_a);
 		deck_gizah_a.add(e2_gizah_a);
