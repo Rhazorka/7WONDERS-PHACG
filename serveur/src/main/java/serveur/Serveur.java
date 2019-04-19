@@ -73,7 +73,6 @@ public class Serveur {
             public void onData(SocketIOClient socketIOClient, Identification identification, AckRequest ackRequest)
                     throws Exception {
                 synchronized (lock) {
-                    identification.setNom((""+listeJoueur.size()));
                     System.out.println("le client est Joueur " + identification.getNom());
                     listeJoueur.put(socketIOClient, new Joueur(identification));
                     sockettemp.add(socketIOClient);
@@ -115,16 +114,15 @@ public class Serveur {
             @Override
             public void onData(SocketIOClient socketIOClient, String carteChoisiJSON, AckRequest ackRequest)
                 throws Exception {
+                //System.out.println("Joueur : "+listeJoueur.get(socketIOClient));
                 String jsonstr = carteChoisiJSON;
                 Gson gson = new Gson();
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
-                //System.out.println("taille du deck : "+listeMainJoueurs.get(socketIOClient).size());
-                //System.out.println("carteChoisi    : "+carteChoisi.getNom());
                 for(int i=0;i<listeMainJoueurs.get(socketIOClient).size();i++){
-                    //System.out.println("carteDuDeck    : "+listeMainJoueurs.get(socketIOClient).get(i).getNom());
                     if(carteChoisi.getNom().equals(listeMainJoueurs.get(socketIOClient).get(i).getNom())){
-                        //System.out.println("bah on suppr : "+listeMainJoueurs.get(socketIOClient).get(i).getNom());
+                        //System.out.println("SERVEUR : Joueur : "+listeJoueur.get(socketIOClient)+" main avant : "+listeMainJoueurs.get(socketIOClient));
                         listeMainJoueurs.get(socketIOClient).remove(i);
+                        //System.out.println("SERVEUR : Joueur : "+listeJoueur.get(socketIOClient)+" main après : "+listeMainJoueurs.get(socketIOClient));
                     }
                 }
             }
@@ -160,8 +158,8 @@ public class Serveur {
             deckAge=deck2;
         else
             deckAge=deck3;
-        System.out.println("\nNombre de tours pour cet age : "+(deckAge.size()-(deckAge.size()%NB_JOUEURS))/NB_JOUEURS);
-        while (i <((deckAge.size()-(deckAge.size()%NB_JOUEURS))/NB_JOUEURS)) {
+        System.out.println("\nNombre de tours pour cet age : "+((((deckAge.size()-(deckAge.size()%NB_JOUEURS))/NB_JOUEURS))-1));
+        while (i <((deckAge.size()-(deckAge.size()%NB_JOUEURS))/NB_JOUEURS)-1) {
             if (tousLesJoueursOntJoue()) {
                 faireUnTourDejeu();
                 i++;
@@ -173,9 +171,8 @@ public class Serveur {
     }
 
     synchronized void initialiserTours(int age){
-        for(int i=NB_JOUEURS;i>0;i--){
-            listeDecks.add(CouperDeck(i,age));
-        }
+        voisin(listeJoueur);
+        couperDeck(age);
         Set<SocketIOClient> cles = listeJoueur.keySet();
         Iterator<SocketIOClient> it = cles.iterator();
         int i=0;
@@ -184,12 +181,10 @@ public class Serveur {
             listeMainJoueurs.put(cle,listeDecks.get(i));
             i++;
         }
-        //System.out.println("listeMainJoueurs : "+listeMainJoueurs.toString());
     }
 
     synchronized void faireUnTourDejeu() {
         razCompteurNbCoupDuTour();
-        voisin(listeJoueur);
         System.out.println("\n\t\t   ====Debut tour====\n");
         Set<SocketIOClient> cles = listeMainJoueurs.keySet();
         Iterator<SocketIOClient> it = cles.iterator();
@@ -220,8 +215,7 @@ public class Serveur {
         socketIOClient.sendEvent("choixCarte",json);
     }
 
-    public ArrayList<Carte> CouperDeck(int joueur, int age) {
-        ArrayList<Carte> mainAge = new ArrayList<Carte>();
+    public void couperDeck(int age) {
         ArrayList<Carte> deckAge = new ArrayList<Carte>();
         if(age==1)
             deckAge=deck1;
@@ -229,9 +223,23 @@ public class Serveur {
             deckAge=deck2;
         else
             deckAge=deck3;
-        for(int i=0;i<((deckAge.size()-(deckAge.size()%NB_JOUEURS))/NB_JOUEURS)+1;i++)
-            mainAge.add(deckAge.get(i+joueur*NB_JOUEURS));
-        return mainAge;
+        
+        listeDecks.add(new ArrayList<Carte>());
+        listeDecks.add(new ArrayList<Carte>());
+        listeDecks.add(new ArrayList<Carte>());
+        int cpt=0;
+        for(int i=0;i<deckAge.size();i++){
+            if(cpt==0){
+                listeDecks.get(cpt).add(deckAge.get(i));
+                cpt++;
+            }else if(cpt==1){
+                listeDecks.get(cpt).add(deckAge.get(i));
+                cpt++;
+            }else if(cpt==2){
+                listeDecks.get(cpt).add(deckAge.get(i));
+                cpt=0;
+            }
+        }
     }
 
     public static void voisin(Map mp) {

@@ -138,6 +138,10 @@ public class Moteur {
 		Carte_militaire caserne = new Carte_militaire("caserne", minerai1, 1);
 		Carte_militaire tour_de_garde = new Carte_militaire("tour de garde", argile1, 1);
 
+		Carte_victoire fake1 = new Carte_victoire("fake1", 1);
+		Carte_victoire fake2 = new Carte_victoire("fake2", 1);
+		Carte_victoire fake3 = new Carte_victoire("fake3", 1);
+
 		// Cartes Age 2
 
 		Carte_ressource scierie = new Carte_ressource("scierie", 1, bois2);
@@ -191,7 +195,7 @@ public class Moteur {
 		deck_artemis_a.add(e2_artemis_a);
 		deck_artemis_a.add(e3_artemis_a);
 
-		deck_age_1.add(preteur_sur_gage);
+		//deck_age_1.add(preteur_sur_gage);
 		deck_age_1.add(autel);
 		deck_age_1.add(chantier);
 		deck_age_1.add(cavite);
@@ -202,12 +206,21 @@ public class Moteur {
 		deck_age_1.add(metier_a_tisser);
 		deck_age_1.add(verrerie);
 		deck_age_1.add(presse);
-		deck_age_1.add(friche);
-		deck_age_1.add(excavation);
+		//deck_age_1.add(friche);
+		//deck_age_1.add(excavation);
 		deck_age_1.add(fosse_argileuse);
 		deck_age_1.add(exploitation_forestiere);
-		deck_age_1.add(gisement);
-		deck_age_1.add(mine);
+		//deck_age_1.add(gisement);
+		//deck_age_1.add(mine);
+		deck_age_1.add(officine);
+		deck_age_1.add(atelier);
+		deck_age_1.add(scriptorium);
+		deck_age_1.add(palissade);
+		deck_age_1.add(caserne);
+		deck_age_1.add(tour_de_garde);
+		deck_age_1.add(fake1);
+		deck_age_1.add(fake2);
+		deck_age_1.add(fake3);
 
 		deck_age_2.add(scierie);
 		deck_age_2.add(carriere);
