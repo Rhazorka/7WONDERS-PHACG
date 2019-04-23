@@ -82,7 +82,6 @@ public class Serveur {
                         for (SocketIOClient s : sockettemp)
                             distributionPlateau(s, p1);
                         listeJoueur.get(socketIOClient).ajouterPlateau(p1);
-                        faireUnAge(1);
                     }
                 }
             }
@@ -94,7 +93,7 @@ public class Serveur {
                     throws Exception {
                 String Jreponse = reponseJSON;
                 Gson gson = new Gson();
-                System.out.println(Jreponse);
+                //System.out.println(Jreponse);
                 Jreponse = ServeurTest();
                 socketIOClient.sendEvent("retour_test", gson.toJson(Jreponse)); // retransforme Jreponse en Json
             }
@@ -104,10 +103,10 @@ public class Serveur {
             @Override
             public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest)
                     throws Exception {
+                unJoueurAJouer();
                 if (tousLesJoueursOntJoue()) {
+                    razCompteurNbCoupDuTour();
                     faireUnAge(age);
-                    serveur.stop();
-                    System.exit(0);
                 }
             }
         });
@@ -126,7 +125,7 @@ public class Serveur {
                 unJoueurAJouer();
 
                 if (tousLesJoueursOntJoue()) {
-                    System.out.println("\t\t   =====Fin tour=====");
+                    System.out.println("\n\t\t   ===== Fin tour "+nbTour+" =====\n");
                     razCompteurNbCoupDuTour();
                     faireUnTourDejeu();
                 }
@@ -157,7 +156,7 @@ public class Serveur {
         nbTour = 0;
         razCompteurNbCoupDuTour();
         initialiserTours(age);
-        System.out.println("\n\t      ~~~~~~~~~~Debut age~~~~~~~~~~");
+        System.out.println("\n\t      ~~~~~~~~~~ Debut age "+age+" ~~~~~~~~~~");
         int i = 0;
         ArrayList<Carte> deckAge = new ArrayList<Carte>();
         if (age == 1)
@@ -172,8 +171,8 @@ public class Serveur {
     }
 
     synchronized void finAge() {
-        System.out.println("\n\t      ~~~~~~~~~~~Fin age~~~~~~~~~~~");
-        System.out.println("\n-----------------------Fin partie-----------------------\n");
+        System.out.println("\t      ~~~~~~~~~~~ Fin age "+age+" ~~~~~~~~~~~");
+        System.out.println("\n----------------------- Fin partie -----------------------\n");
         serveur.stop();
         System.exit(0);
     }
@@ -197,7 +196,7 @@ public class Serveur {
         if (nbTour > 6)
             finAge();
         else {
-            System.out.println("\n\t\t   ====Debut tour " + nbTour + " ====\n");
+            System.out.println("\n\t\t   ==== Debut tour "+nbTour+" ====");
 
             Set<SocketIOClient> cles = listeMainJoueurs.keySet();
             Iterator<SocketIOClient> it = cles.iterator();
@@ -263,13 +262,13 @@ public class Serveur {
 
         int k = in.size() - 1;
         for (int j = 0; j < in.size(); j++) {
-            System.out.println("Joueur :" + j);
+            System.out.println("Joueur : " + j);
             if ((j - 1) % 3 == -1) {
-                System.out.println("Voisin gauche :" + k);
+                System.out.println("    Voisin gauche : Joueur " + k);
             } else {
-                System.out.println("Voisin gauche :" + (j - 1) % 3);
+                System.out.println("    Voisin gauche : Joueur " + (j - 1) % 3);
             }
-            System.out.println("Voisin droite :" + (j + 1) % 3);
+            System.out.println("    Voisin droite : Joueur " + (j + 1) % 3);
         }
     }
 

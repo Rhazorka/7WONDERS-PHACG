@@ -67,7 +67,7 @@ public class Client {
                 @Override
                 public void call(Object... objects){
                     phrase_retour = (String) objects[0];
-                    System.out.println(phrase_retour);
+                    //System.out.println(phrase_retour);
                 }
             });
 
