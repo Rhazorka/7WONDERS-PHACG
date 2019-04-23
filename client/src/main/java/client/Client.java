@@ -34,11 +34,12 @@ public class Client {
     public Carte choisirCarte(ArrayList<Carte> cartes) {
 		Carte ret;
 		for (Carte c : cartes) {
-			 System.out.println(cartes.indexOf(c)+" : "+c.toString());
+			 System.out.println(cartes.indexOf(c)+" : "+c.getNom());
 		}
 		int choix_bot = (int) (Math.random() * cartes.size());
 		while(true) {
 			try {
+                System.out.println("Le Joueur "+moi.getNom()+" a choisi la carte numéro "+choix_bot+" soit "+cartes.get(choix_bot).getNom());
 				ret = cartes.get(choix_bot);
 				//cartes.remove(choix_bot);
 				return ret;
@@ -86,10 +87,11 @@ public class Client {
                     Gson gson = new Gson();
                     Carte_victoire[] deck = gson.fromJson(jsonstr, Carte_victoire[].class);
                     ArrayList<Carte> deckAL = new ArrayList<Carte>(Arrays.asList(deck));
-                    System.out.println("Le Joueur "+moi.getNom()+" choisi le numero de la carte qu'il va jouer : ");
+                    System.out.println("\nLe Joueur "+moi.getNom()+" choisi le numero de la carte qu'il va jouer : ");
                     Carte carteChoisi = choisirCarte(deckAL);
-                    System.out.println("client : carteChoisi = " + carteChoisi.toString()+"\n");
+                    //System.out.println("carteChoisi = " + carteChoisi.getNom()+"\n");
                     String json = new Gson().toJson(carteChoisi);
+                    System.out.println("Le Joueur "+moi.getNom()+" nous emit qu'il veut supprimer la carte "+carteChoisi.getNom());
                     connexion.emit("choixCarte", json);
                 }
             });

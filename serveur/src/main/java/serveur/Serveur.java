@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 public class Serveur {
     public final static int NB_JOUEURS = 3;
@@ -34,6 +35,7 @@ public class Serveur {
     private int nbCoupDuTour = 0;
     private int age = 1;
     private ArrayList<ArrayList<Carte>> listeDecks = new ArrayList<ArrayList<Carte>>();
+    private ArrayList<Carte> listeASupprimer = new ArrayList<Carte>();
 
     private ArrayList<Carte> deck1;
     private ArrayList<Carte> deck2;
@@ -118,10 +120,13 @@ public class Serveur {
                 String jsonstr = carteChoisiJSON;
                 Gson gson = new Gson();
                 Carte_victoire carteChoisi = gson.fromJson(jsonstr, Carte_victoire.class);
+                System.out.println("Le Joueur "+listeJoueur.get(socketIOClient).getId().getNom()+" a choisi la carte "+carteChoisi.getNom()+"\n");
                 for(int i=0;i<listeMainJoueurs.get(socketIOClient).size();i++){
                     if(carteChoisi.getNom().equals(listeMainJoueurs.get(socketIOClient).get(i).getNom())){
                         //System.out.println("SERVEUR : Joueur : "+listeJoueur.get(socketIOClient)+" main avant : "+listeMainJoueurs.get(socketIOClient));
                         listeMainJoueurs.get(socketIOClient).remove(i);
+                        //System.out.println("J'ajoute la carte "+listeMainJoueurs.get(socketIOClient).get(i).getNom()+" a la liste des cartes à supprimer");
+                        //listeASupprimer.add(listeMainJoueurs.get(socketIOClient).get(i));
                         //System.out.println("SERVEUR : Joueur : "+listeJoueur.get(socketIOClient)+" main après : "+listeMainJoueurs.get(socketIOClient));
                     }
                 }
@@ -173,31 +178,70 @@ public class Serveur {
     synchronized void initialiserTours(int age){
         voisin(listeJoueur);
         couperDeck(age);
+
+        /*avec iterator*/
         Set<SocketIOClient> cles = listeJoueur.keySet();
         Iterator<SocketIOClient> it = cles.iterator();
         int i=0;
         while (it.hasNext()){
             SocketIOClient cle = it.next();
             listeMainJoueurs.put(cle,listeDecks.get(i));
+            //System.out.println("Le joueur : "+listeJoueur.get(cle).getId().getNom()+" a le deck commencant par "+listeMainJoueurs.get(cle).get(0).getNom());
             i++;
         }
+        
+        /*sans iterator*/
+        /*int x=0;
+        for(Entry<SocketIOClient, Joueur> entry : listeJoueur.entrySet()) {
+            SocketIOClient cle = entry.getKey();
+            Joueur valeur = entry.getValue();
+            listeMainJoueurs.put(cle,listeDecks.get(x));
+            x++;
+        }*/
+
+        //System.out.println("listeMainJoueurs : "+listeMainJoueurs.toString());
     }
 
     synchronized void faireUnTourDejeu() {
         razCompteurNbCoupDuTour();
         System.out.println("\n\t\t   ====Debut tour====\n");
+
+        /*avec iterator*/
         Set<SocketIOClient> cles = listeMainJoueurs.keySet();
         Iterator<SocketIOClient> it = cles.iterator();
         int i=0;
         while (it.hasNext()){
             SocketIOClient cle = it.next();
+            //System.out.println("Le joueur : "+listeJoueur.get(cle).getId().getNom()+" a le deck commencant par "+listeMainJoueurs.get(cle).get(0).getNom());
+            //System.out.println("Je demande au joueur "+listeJoueur.get(cle).getId().getNom()+" de joué");
             choixCarte(cle, listeMainJoueurs.get(cle));
+            /*for(Carte c : listeASupprimer){
+                if(listeMainJoueurs.get(cle).contains(c)){
+                    System.out.println("Suppression de la carte "+c.getNom());
+                    listeMainJoueurs.get(cle).remove(c);
+                }
+            }*/
         }
+
+        /*sans iterator*/
+        /*for(Entry<SocketIOClient, ArrayList<Carte>> entry : listeMainJoueurs.entrySet()) {
+            SocketIOClient cle = entry.getKey();
+            ArrayList<Carte> valeur = entry.getValue();
+            choixCarte(cle, valeur);
+            for(Carte c : listeASupprimer){
+                if(valeur.contains(c)){
+                    valeur.remove(c);
+                }
+            }
+        }*/
+
+        /*attention ! attrape les erreurs*/
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         System.out.println("\t\t   =====Fin tour=====");
     }
 
