@@ -36,16 +36,16 @@ public class MoteurTest {
 
 	// Test instance des cartes/decks par age
 	ArrayList<Carte> DeckAge1 = moteur.getdeckA1();
-	Carte preteur_sur_gageTest = DeckAge1.get(0);
+	Carte autelTest = DeckAge1.get(0); // le top deck de l'age 1 est "autel" (voir Moteur)
 
-	Carte_victoire preteur_sur_gage = new Carte_victoire("preteur_sur_gage", 3);
+	Carte_victoire autel = new Carte_victoire("autel", 2);
 
 	/*on crée une identification pour le besoin du test*/
 	Identification i1 = new Identification("j1");
 	/*on crée le joueur*/
 	Joueur j1 = new Joueur(gizahTest,i1);
 
-	String Sjoueur = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[Carte [nom=etape 1], Carte [nom=etape 2], Carte [nom=etape 3]]], ptsVictoire=3, cartes=[Carte [nom=preteur_sur_gage]]]";
+	String Sjoueur = "Joueur [id=j1, plateau=Plateau [nom=gizah_a, ressourcePrincipale=PIERRE, etape=[Carte [nom=etape 1], Carte [nom=etape 2], Carte [nom=etape 3]]], ptsVictoire=2, cartes=[Carte [nom=autel]]]";
 	
 	
 	@Test
@@ -57,9 +57,9 @@ public class MoteurTest {
 
 		assertEquals(gizah_a.toString(),gizahTest.toString()); // test si on récupère correctement le plateaux gizah_a instancié dans Moteur
 		
-		assertEquals(preteur_sur_gage.toString(), preteur_sur_gageTest.toString()); // test si on récupère correctement la première carte instanciée dans le deck de l Age 1
+		assertEquals(autel.toString(), autelTest.toString()); // test si on récupère correctement la première carte instanciée dans le deck de l Age 1
 
-		j1.ajouterCarte(preteur_sur_gageTest);
+		j1.ajouterCarte(autelTest);
 		assertTrue(Sjoueur.equals(j1.toString())); // test si le plateau et la carte ajoutés ont bien été ajouté dans la donnée du joueur
 	/*	
 		M_temp.melangerDeck_A1();
