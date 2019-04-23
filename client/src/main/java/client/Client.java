@@ -91,7 +91,7 @@ public class Client {
                     Carte carteChoisi = choisirCarte(deckAL);
                     //System.out.println("carteChoisi = " + carteChoisi.getNom()+"\n");
                     String json = new Gson().toJson(carteChoisi);
-                    System.out.println("Le Joueur "+moi.getNom()+" nous emit qu'il veut supprimer la carte "+carteChoisi.getNom());
+                    //System.out.println("Le Joueur "+moi.getNom()+" nous emit qu'il veut supprimer la carte "+carteChoisi.getNom());
                     connexion.emit("choixCarte", json);
                 }
             });
@@ -109,6 +109,7 @@ public class Client {
                         rep=true;
                     }
                     String json = new Gson().toJson(rep);
+                    System.out.println("Le joueur "+moi.getNom()+" a reçu son plateau");
                     connexion.emit("distributionPlateau",json);
                 }
             });
