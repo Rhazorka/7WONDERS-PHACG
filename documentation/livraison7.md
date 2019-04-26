@@ -2,7 +2,7 @@
 
 ## Fonctionnalités à implémenter
 
-Les tours sont maintenant fonctionnel et le premier age se déroule correctement, les cartes choisies sont retirées des mains correspondante et l'age s'arrête quand il ne reste plus qu'une seule carte
+Les tours sont maintenant fonctionnels et le premier age se déroule correctement, les cartes choisies sont retirées des mains correspondante et l'age s'arrête quand il ne reste plus qu'une seule carte
 
 ## Tâches réalisées 
 
@@ -14,11 +14,11 @@ Les tours sont maintenant fonctionnel et le premier age se déroule correctement
 
 4. Les cartes choisis par les joueurs sont correctement retirées des mains
 
-5. Ajout des cartes scientifiques et militaires ainsi que des calculs qui leur sont propres
+5. Ajout des cartes scientifiques et militaires ainsi que des calculs qui leurs sont propres (Alexandre)
 
 
 ## reporté à l'itération suivante
 
 1. l'appelle de la méthode AcheterCartes() qui vérifie si le joueur peut acheter une carte, dans le déroulement d'une partie (Gautier + Alexandre)
 
-2. La mise en place des tests Client/Serveur dans ServeurTest et ClientTest
+2. La mise en place des tests Client/Serveur dans ServeurTest et ClientTest (Céline)
