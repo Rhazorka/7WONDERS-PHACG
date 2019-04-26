@@ -45,10 +45,6 @@ public class Serveur {
         return Deck_AgeX;
     }
 
-    public String ServeurTest() {
-        return "serveur : réplique reçu";
-    }
-
     public Serveur(Configuration config) {
         razCompteurNbCoupDuTour();
         serveur = new SocketIOServer(config);
@@ -87,17 +83,6 @@ public class Serveur {
             }
         });
 
-        serveur.addEventListener("test", String.class, new DataListener<String>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient, String reponseJSON, AckRequest ackRequest)
-                    throws Exception {
-                String Jreponse = reponseJSON;
-                Gson gson = new Gson();
-                //System.out.println(Jreponse);
-                Jreponse = ServeurTest();
-                socketIOClient.sendEvent("retour_test", gson.toJson(Jreponse)); // retransforme Jreponse en Json
-            }
-        });
 
         serveur.addEventListener("distributionPlateau", String.class, new DataListener<String>() {
             @Override
@@ -270,12 +255,6 @@ public class Serveur {
             }
             System.out.println("    Voisin droite : Joueur " + (j + 1) % 3);
         }
-    }
-
-    private void test(SocketIOClient socketIOClient) {
-        // Gson gson = new Gson();
-        // String json = new Gson().toJson(str);
-        socketIOClient.sendEvent("test");
     }
 
     public static final void main(String[] args) {

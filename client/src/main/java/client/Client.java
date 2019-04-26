@@ -6,6 +6,8 @@ import io.socket.emitter.Emitter;
 import org.json.JSONObject;
 import com.google.gson.Gson;
 
+
+
 import commun.Identification;
 import commun.Carte_victoire;
 import commun.Carte;
@@ -16,20 +18,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Client {
+public class Client{
     private Identification moi = new Identification();
     private Socket connexion;
 
-    public String phrase_base;
-    public String phrase_retour = "hello world";
-
-    public void setphrase_base(String newstr){
-        this.phrase_base = newstr;
-    }
-
-    public String ClientTest(){
-        return "client : réplique";
-    }
 
     public Carte choisirCarte(ArrayList<Carte> cartes) {
 		Carte ret;
@@ -63,13 +55,6 @@ public class Client {
                 }
             });
 
-            connexion.on("retour_test", new Emitter.Listener(){
-                @Override
-                public void call(Object... objects){
-                    phrase_retour = (String) objects[0];
-                    //System.out.println(phrase_retour);
-                }
-            });
 
             connexion.on("disconnect", new Emitter.Listener() {
                 @Override
@@ -91,7 +76,7 @@ public class Client {
                     Carte carteChoisi = choisirCarte(deckAL);
                     //System.out.println("carteChoisi = " + carteChoisi.getNom()+"\n");
                     String json = new Gson().toJson(carteChoisi);
-                    //System.out.println("Le Joueur "+moi.getNom()+" nous emit qu'il veut supprimer la carte "+carteChoisi.getNom());
+                    System.out.println("Le Joueur "+moi.getNom()+" nous emit qu'il veut supprimer la carte "+carteChoisi.getNom());
                     connexion.emit("choixCarte", json);
                 }
             });
@@ -101,15 +86,10 @@ public class Client {
                 public void call(Object... objects) {
                     Boolean rep =false;
 
-                    phrase_base = ClientTest();
-                    String Strjson = new Gson().toJson(phrase_base);
-                    connexion.emit("test",Strjson);
-
                     if(objects.length>0){
                         rep=true;
                     }
                     String json = new Gson().toJson(rep);
-                    System.out.println("Le joueur "+moi.getNom()+" a reçu son plateau");
                     connexion.emit("distributionPlateau",json);
                 }
             });
